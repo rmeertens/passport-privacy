@@ -7,18 +7,18 @@
   <meta name="description" content="Add a watermark and black out personal details on a scan of your passport or ID — entirely in your browser. Nothing is uploaded, nothing is stored." />
   <style>
     :root {
-      --bg: #0b1020;
-      --bg-soft: #131a2d;
-      --card: rgba(19, 26, 45, 0.82);
-      --card-strong: rgba(29, 37, 63, 0.95);
-      --text: #eef2ff;
-      --muted: #aab4d6;
-      --accent: #8b5cf6;
-      --accent-2: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-      --border: rgba(255, 255, 255, 0.1);
-      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --bg: #f4f7fb;
+      --bg-soft: #ffffff;
+      --card: #ffffff;
+      --card-strong: #ffffff;
+      --text: #0b1f3a;
+      --muted: #475569;
+      --accent: #1d4ed8;
+      --accent-2: #047857;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --border: #e2e8f0;
+      --shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
     }
 
     * { box-sizing: border-box; }
@@ -27,9 +27,9 @@
       margin: 0;
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(139, 92, 246, 0.18), transparent 35%),
-        radial-gradient(circle at top right, rgba(34, 197, 94, 0.12), transparent 30%),
-        linear-gradient(180deg, #0a0f1d 0%, #101729 100%);
+        radial-gradient(circle at top left, rgba(29, 78, 216, 0.06), transparent 40%),
+        radial-gradient(circle at top right, rgba(4, 120, 87, 0.05), transparent 35%),
+        linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
       color: var(--text);
       min-height: 100vh;
     }
@@ -82,8 +82,8 @@
     }
 
     .privacy-card {
-      border-color: rgba(34, 197, 94, 0.35);
-      background: linear-gradient(145deg, rgba(34, 197, 94, 0.08), rgba(19, 26, 45, 0.85));
+      border-color: rgba(4, 120, 87, 0.35);
+      background: linear-gradient(145deg, rgba(4, 120, 87, 0.06), #ffffff);
     }
     .privacy-card h2 { margin-top: 0; }
     .privacy-card ul { line-height: 1.75; color: var(--muted); }
@@ -100,9 +100,9 @@
       align-items: center;
       justify-content: center;
       padding: 22px;
-      border: 2px dashed rgba(139, 92, 246, 0.5);
+      border: 2px dashed rgba(29, 78, 216, 0.4);
       border-radius: 16px;
-      background: rgba(139, 92, 246, 0.06);
+      background: rgba(29, 78, 216, 0.04);
       cursor: pointer;
       color: var(--muted);
       font-weight: 600;
@@ -110,7 +110,7 @@
       transition: all 0.15s ease;
     }
     .file-drop:hover, .file-drop.over {
-      background: rgba(139, 92, 246, 0.15);
+      background: rgba(29, 78, 216, 0.08);
       color: var(--text);
       border-color: var(--accent);
     }
@@ -129,7 +129,7 @@
     button, .btn {
       font: inherit;
       border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.04);
+      background: #ffffff;
       color: var(--text);
       padding: 12px 16px;
       border-radius: 12px;
@@ -137,14 +137,14 @@
       font-weight: 600;
       transition: all 0.15s ease;
     }
-    button:hover, .btn:hover { background: rgba(255, 255, 255, 0.08); }
+    button:hover, .btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
     button.primary, .btn.primary {
-      background: linear-gradient(135deg, var(--accent), #6d7cff);
+      background: linear-gradient(135deg, var(--accent), #2563eb);
       color: white;
       border-color: transparent;
     }
-    button.primary:hover, .btn.primary:hover { filter: brightness(1.1); }
-    button.danger { color: var(--danger); border-color: rgba(239, 68, 68, 0.4); }
+    button.primary:hover, .btn.primary:hover { filter: brightness(1.05); }
+    button.danger { color: var(--danger); border-color: rgba(185, 28, 28, 0.35); }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .form-grid {
@@ -169,12 +169,13 @@
       padding: 10px 14px;
       border-radius: 10px;
       border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.25);
+      background: #ffffff;
       color: var(--text);
     }
     input[type="text"]:focus, input[type="date"]:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
     }
 
     .hint { font-size: 0.92rem; color: var(--muted); margin: 0 0 12px; }
@@ -184,7 +185,7 @@
       overflow: auto;
       border: 1px solid var(--border);
       border-radius: 16px;
-      background: #0a0a0a;
+      background: #f1f5f9;
       padding: 10px;
       display: flex;
       justify-content: center;
@@ -228,7 +229,7 @@
       padding: 14px 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.18);
+      background: #f8fafc;
       color: var(--muted);
     }
     .heic-help summary {
@@ -238,7 +239,8 @@
     }
     .heic-help p, .heic-help li { color: var(--muted); line-height: 1.65; }
     .heic-help code {
-      background: rgba(255, 255, 255, 0.08);
+      background: #e2e8f0;
+      color: var(--text);
       padding: 1px 6px;
       border-radius: 4px;
       font-size: 0.9em;
@@ -262,91 +264,10 @@
         Upload or photograph a scan of your passport or ID card, black out the personal details you don't want
         to share, and stamp a diagonal watermark with the purpose and date — done entirely in your browser.
       </p>
-      <a class="back" href="../">← Back to Clawbot Musings</a>
+      <a class="back" href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">⟨/⟩ View the source on GitHub — open source, no hidden code</a>
     </header>
 
     <main>
-      <section class="card privacy-card">
-        <h2>🔒 Your image never leaves this browser tab</h2>
-        <ul>
-          <li>No upload servers. No API calls. No analytics. No trackers.</li>
-          <li>Everything runs in pure JavaScript on your device.</li>
-          <li>Nothing is saved — not in cookies, not in localStorage, not anywhere.</li>
-          <li>Refresh the page and it's gone. Close the tab and it's gone.</li>
-          <li>You can even save this page (Ctrl+S / ⌘+S) and use it fully offline.</li>
-          <li>
-            This page deliberately pulls in <em>zero</em> third-party scripts at runtime — not even for things
-            like HEIC decoding — so there is no CDN that could be compromised to attack your copy of the page.
-          </li>
-        </ul>
-        <p style="margin-bottom: 0;">
-          This matters because a photo of your ID is sensitive data: it contains your full name, date of birth,
-          document number, signature, photo, and — on Dutch documents — your BSN. Handing that around
-          unprotected is a favourite ingredient for identity fraud.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>What the Dutch government recommends</h2>
-        <p>
-          Two official sources give consistent advice for sharing a copy of a Dutch ID document:
-          <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
-          (the central government portal) and the
-          <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>
-          (the Dutch Data Protection Authority). In short:
-        </p>
-        <ul>
-          <li>Make your <strong>BSN</strong> (burgerservicenummer / citizen service number) unreadable on the copy — <em>including</em> in the machine-readable digits at the bottom of the document.</li>
-          <li>You are allowed to black out your <strong>passport photo</strong> and <strong>signature</strong> too.</li>
-          <li>Write on the copy that it is a <strong>copy</strong>, and for whom / for what product or purpose the copy is intended.</li>
-          <li>Write on the copy the <strong>date</strong> on which you're giving the copy away.</li>
-        </ul>
-        <p>
-          The Autoriteit Persoonsgegevens is explicit that some organisations — for example telecom providers
-          and car rental companies — are not even allowed to process your BSN and passport photo, and must
-          block them out themselves if they make a copy.
-        </p>
-        <p style="margin-bottom: 0;">
-          Good to know: for Dutch passports and ID cards issued from <strong>2 August 2021</strong> onwards, the BSN is no
-          longer printed on the front of the document at all — it's encoded in a QR code on the back, so a plain
-          scan of the front no longer exposes it. Older documents still print the BSN and need it blacked out.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>What about the UK?</h2>
-        <p>
-          UK consumer guidance on identity-document safety is spread across three main bodies, and — unlike
-          the Dutch sources — none of them publish a step-by-step "how to redact your passport copy"
-          procedure. Their advice leans heavily on prevention, reporting, and protective registration:
-        </p>
-        <ul>
-          <li>
-            <a href="https://ico.org.uk/for-the-public/identity-theft/" target="_blank" rel="noopener">Information Commissioner's Office (ICO) — Identity theft</a>:
-            the UK regulator's consumer page. It explains the warning signs and what to do if you think your
-            personal data has been compromised, and advises reporting lost or stolen ID documents to the
-            issuing body.
-          </li>
-          <li>
-            <a href="https://www.actionfraud.police.uk/a-z-of-fraud/identity-fraud-and-identity-theft" target="_blank" rel="noopener">Action Fraud — Identity fraud and identity theft</a>:
-            the UK's national reporting centre for fraud. Recommends keeping personal documents locked away,
-            destroying anything with your name on it before binning it, and reporting lost or stolen passports
-            to HM Passport Office.
-          </li>
-          <li>
-            <a href="https://www.cifas.org.uk/services/identity-protection" target="_blank" rel="noopener">Cifas — Identity protection</a>:
-            the UK's fraud-prevention service. You can pay a small fee for <em>Protective Registration</em>
-            so that any credit or account applications in your name get extra checks.
-          </li>
-        </ul>
-        <p style="margin-bottom: 0;">
-          The underlying principle is the same in every country: share the minimum, to the minimum number of
-          people, for the minimum time, and keep a record of who you sent it to. Redacting what a recipient
-          doesn't strictly need, and stamping the copy with its purpose, travels well across jurisdictions —
-          even if only the Dutch government happens to spell it out in that much detail.
-        </p>
-      </section>
-
       <section class="card tool">
         <h2>1. Add your passport or ID</h2>
         <p class="hint">Choose a file from your device or take a photo with your camera. Both options keep the image entirely in this browser.</p>
@@ -439,6 +360,87 @@
         </div>
       </section>
 
+      <section class="card privacy-card">
+        <h2>🔒 Your image never leaves this browser tab</h2>
+        <ul>
+          <li>No upload servers. No API calls. No analytics. No trackers.</li>
+          <li>Everything runs in pure JavaScript on your device.</li>
+          <li>Nothing is saved — not in cookies, not in localStorage, not anywhere.</li>
+          <li>Refresh the page and it's gone. Close the tab and it's gone.</li>
+          <li>You can even save this page (Ctrl+S / ⌘+S) and use it fully offline.</li>
+          <li>
+            This page deliberately pulls in <em>zero</em> third-party scripts at runtime — not even for things
+            like HEIC decoding — so there is no CDN that could be compromised to attack your copy of the page.
+          </li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          This matters because a photo of your ID is sensitive data: it contains your full name, date of birth,
+          document number, signature, photo, and — on Dutch documents — your BSN. Handing that around
+          unprotected is a favourite ingredient for identity fraud.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>What the Dutch government recommends</h2>
+        <p>
+          Two official sources give consistent advice for sharing a copy of a Dutch ID document:
+          <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
+          (the central government portal) and the
+          <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>
+          (the Dutch Data Protection Authority). In short:
+        </p>
+        <ul>
+          <li>Make your <strong>BSN</strong> (burgerservicenummer / citizen service number) unreadable on the copy — <em>including</em> in the machine-readable digits at the bottom of the document.</li>
+          <li>You are allowed to black out your <strong>passport photo</strong> and <strong>signature</strong> too.</li>
+          <li>Write on the copy that it is a <strong>copy</strong>, and for whom / for what product or purpose the copy is intended.</li>
+          <li>Write on the copy the <strong>date</strong> on which you're giving the copy away.</li>
+        </ul>
+        <p>
+          The Autoriteit Persoonsgegevens is explicit that some organisations — for example telecom providers
+          and car rental companies — are not even allowed to process your BSN and passport photo, and must
+          block them out themselves if they make a copy.
+        </p>
+        <p style="margin-bottom: 0;">
+          Good to know: for Dutch passports and ID cards issued from <strong>2 August 2021</strong> onwards, the BSN is no
+          longer printed on the front of the document at all — it's encoded in a QR code on the back, so a plain
+          scan of the front no longer exposes it. Older documents still print the BSN and need it blacked out.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>What about the UK?</h2>
+        <p>
+          UK consumer guidance on identity-document safety is spread across three main bodies, and — unlike
+          the Dutch sources — none of them publish a step-by-step "how to redact your passport copy"
+          procedure. Their advice leans heavily on prevention, reporting, and protective registration:
+        </p>
+        <ul>
+          <li>
+            <a href="https://ico.org.uk/for-the-public/identity-theft/" target="_blank" rel="noopener">Information Commissioner's Office (ICO) — Identity theft</a>:
+            the UK regulator's consumer page. It explains the warning signs and what to do if you think your
+            personal data has been compromised, and advises reporting lost or stolen ID documents to the
+            issuing body.
+          </li>
+          <li>
+            <a href="https://www.actionfraud.police.uk/a-z-of-fraud/identity-fraud-and-identity-theft" target="_blank" rel="noopener">Action Fraud — Identity fraud and identity theft</a>:
+            the UK's national reporting centre for fraud. Recommends keeping personal documents locked away,
+            destroying anything with your name on it before binning it, and reporting lost or stolen passports
+            to HM Passport Office.
+          </li>
+          <li>
+            <a href="https://www.cifas.org.uk/services/identity-protection" target="_blank" rel="noopener">Cifas — Identity protection</a>:
+            the UK's fraud-prevention service. You can pay a small fee for <em>Protective Registration</em>
+            so that any credit or account applications in your name get extra checks.
+          </li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          The underlying principle is the same in every country: share the minimum, to the minimum number of
+          people, for the minimum time, and keep a record of who you sent it to. Redacting what a recipient
+          doesn't strictly need, and stamping the copy with its purpose, travels well across jurisdictions —
+          even if only the Dutch government happens to spell it out in that much detail.
+        </p>
+      </section>
+
       <section class="card">
         <h2>Before you send your copy</h2>
         <ul>
@@ -450,11 +452,12 @@
       </section>
 
       <footer>
-        A small clawbot-musings experiment that follows the advice of
+        A small open-source experiment that follows the advice of
         <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
         and the
         <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.
-        No data is collected — view source to verify.
+        No data is collected — don't take our word for it:
+        <a href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">read the source on GitHub</a>.
       </footer>
     </main>
   </div>
