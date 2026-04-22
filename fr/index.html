@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Passport Watermark & Blackout Tool</title>
-  <meta name="description" content="Add a watermark and black out personal details on a scan of your passport or ID — entirely in your browser. Nothing is uploaded, nothing is stored." />
-  <link rel="canonical" href="https://passport-privacy.meertens.dev/" />
+  <title>Filigrane &amp; masquage pour copie de passeport ou carte d'identité</title>
+  <meta name="description" content="Ajoutez un filigrane et masquez les informations personnelles sur la copie de votre passeport ou de votre pièce d'identité — entièrement dans votre navigateur. Rien n'est envoyé, rien n'est stocké." />
+  <link rel="canonical" href="https://passport-privacy.meertens.dev/fr/" />
   <link rel="alternate" hreflang="en" href="https://passport-privacy.meertens.dev/" />
   <link rel="alternate" hreflang="de" href="https://passport-privacy.meertens.dev/de/" />
   <link rel="alternate" hreflang="fr" href="https://passport-privacy.meertens.dev/fr/" />
@@ -286,84 +286,85 @@
 <body>
   <div class="page-shell">
     <header class="hero">
-      <nav class="lang-switch" aria-label="Language">
-        <a href="/" aria-current="page">English</a>
+      <nav class="lang-switch" aria-label="Langue">
+        <a href="/" hreflang="en">English</a>
         <a href="/de/" hreflang="de">Deutsch</a>
-        <a href="/fr/" hreflang="fr">Français</a>
+        <a href="/fr/" aria-current="page">Français</a>
       </nav>
-      <p class="eyebrow">based on official Dutch government advice</p>
-      <h1>Passport Watermark &amp; Blackout Tool</h1>
+      <p class="eyebrow">conforme aux recommandations officielles des autorités européennes</p>
+      <h1>Filigraner &amp; masquer une copie de pièce d'identité</h1>
       <p class="hero-copy">
-        Upload or photograph a scan of your passport or ID card, black out the personal details you don't want
-        to share, and stamp a diagonal watermark with the purpose and date — done entirely in your browser.
+        Importez ou photographiez le scan de votre passeport ou de votre carte d'identité, masquez les
+        informations que vous ne souhaitez pas transmettre, puis apposez un filigrane en diagonale
+        indiquant la finalité et la date — tout se passe dans votre navigateur.
       </p>
-      <a class="back" href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">⟨/⟩ View the source on GitHub — open source, no hidden code</a>
+      <a class="back" href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">⟨/⟩ Voir le code source sur GitHub — open source, aucun code caché</a>
     </header>
 
     <main>
       <section class="card tool">
-        <h2>1. Add your passport or ID</h2>
-        <p class="hint">Choose a file from your device or take a photo with your camera. Both options keep the image entirely in this browser.</p>
+        <h2>1. Ajoutez votre passeport ou pièce d'identité</h2>
+        <p class="hint">Choisissez un fichier sur votre appareil ou prenez une photo avec votre caméra. Dans les deux cas, l'image reste entièrement dans ce navigateur.</p>
 
         <label class="file-drop" id="drop">
           <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
-          <span id="drop-label">Drop an image here or click to choose a file (JPEG or PNG)</span>
+          <span id="drop-label">Déposez une image ici ou cliquez pour choisir un fichier (JPEG ou PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
-          <summary>Got a <code>.HEIC</code> photo from an iPhone? How to convert it first</summary>
+          <summary>Une photo <code>.HEIC</code> prise avec un iPhone ? Voici comment la convertir</summary>
           <p>
-            HEIC is Apple's default photo format. This tool deliberately does not bundle a HEIC decoder,
-            because any third-party decoder loaded at runtime would be a supply-chain risk for a page that
-            handles your passport. Here's how to convert HEIC to JPEG locally on common platforms:
+            HEIC est le format photo par défaut d'Apple. Ce site n'embarque volontairement aucun décodeur
+            HEIC, car tout décodeur tiers chargé à l'exécution constituerait un risque pour une page qui
+            traite votre pièce d'identité. Voici comment convertir un HEIC en JPEG localement :
           </p>
           <ul>
             <li>
-              <strong>iPhone / iPad</strong> — simplest: open Settings → Camera → Formats → pick
-              <em>Most Compatible</em>, then retake the photo; new photos will be JPEG. For an existing
-              HEIC, open the photo in the Files app, long-press it, choose Share → <em>Save to Files</em>
-              with the "JPEG" option, or use the built-in <em>Convert Image</em> action in the Shortcuts
-              app.
+              <strong>iPhone / iPad</strong> — le plus simple : Réglages → Appareil photo → Formats →
+              <em>Le plus compatible</em>, puis reprenez la photo ; les nouvelles photos seront en JPEG.
+              Pour un HEIC existant, ouvrez la photo dans l'app Fichiers, appuyez longuement, choisissez
+              Partager → <em>Enregistrer dans Fichiers</em> avec l'option JPEG, ou utilisez l'action
+              intégrée <em>Convertir l'image</em> dans l'app Raccourcis.
             </li>
             <li>
-              <strong>macOS</strong> — double-click the HEIC to open in Preview, then File → Export… → set
-              Format to JPEG.
+              <strong>macOS</strong> — ouvrez le HEIC dans Aperçu, puis Fichier → Exporter… → format JPEG.
             </li>
             <li>
-              <strong>Windows 10/11</strong> — install Microsoft's free "HEIF Image Extensions" from the
-              Microsoft Store, then open the file in Photos and choose "Save as" → JPEG.
+              <strong>Windows 10/11</strong> — installez l'extension gratuite « Extensions d'image HEIF »
+              de Microsoft depuis le Microsoft Store, ouvrez le fichier dans Photos et choisissez
+              « Enregistrer sous » → JPEG.
             </li>
             <li>
-              <strong>Android</strong> — most Androids already save photos as JPEG. If you received a HEIC,
-              open it in Google Photos → menu → "Save as" / "Export".
+              <strong>Android</strong> — la plupart des Android enregistrent déjà en JPEG. Si vous avez
+              reçu un HEIC, ouvrez-le dans Google Photos → menu → « Enregistrer sous » / « Exporter ».
             </li>
           </ul>
           <p style="margin-bottom: 0;">
-            Please <strong>avoid online HEIC converters</strong> for this — uploading your passport to a
-            random conversion service defeats the point of this tool.
+            Merci d'<strong>éviter les convertisseurs HEIC en ligne</strong> — envoyer votre passeport à
+            un service de conversion aléatoire annule tout l'intérêt de ce site.
           </p>
         </details>
 
         <div class="upload-row">
-          <button type="button" id="start-camera">📷 Take a photo with my camera</button>
-          <button type="button" id="pick-file">🖼️ Choose an existing image</button>
+          <button type="button" id="start-camera">📷 Prendre une photo avec ma caméra</button>
+          <button type="button" id="pick-file">🖼️ Choisir une image existante</button>
         </div>
 
         <div class="camera-panel" id="camera-panel" hidden>
           <video id="video" playsinline muted></video>
           <div class="actions">
-            <button type="button" id="shutter" class="primary">Capture</button>
-            <button type="button" id="flip-camera">Switch camera</button>
-            <button type="button" id="cancel-camera">Cancel</button>
+            <button type="button" id="shutter" class="primary">Capturer</button>
+            <button type="button" id="flip-camera">Changer de caméra</button>
+            <button type="button" id="cancel-camera">Annuler</button>
           </div>
           <p class="status" id="camera-status"></p>
         </div>
 
-        <h2>2. Fill in the watermark</h2>
+        <h2>2. Renseignez le filigrane</h2>
         <div class="form-grid">
           <label>
-            Purpose of sending
-            <input type="text" id="purpose" placeholder="e.g. rental contract with Acme Ltd" maxlength="140" autocomplete="off" />
+            Finalité de l'envoi
+            <input type="text" id="purpose" placeholder="ex. ouverture d'un compte chez Exemple SA" maxlength="140" autocomplete="off" />
           </label>
           <label>
             Date
@@ -372,173 +373,170 @@
         </div>
 
         <div id="editor" hidden>
-          <h2>3. Black out anything you don't want to share</h2>
+          <h2>3. Masquez tout ce que vous ne voulez pas partager</h2>
           <p class="hint">
-            Drag on the image to draw a black rectangle over any field you'd rather not share.
-            On Dutch passports the usual ones to hide are the <strong>BSN</strong>, <strong>document number</strong>,
-            <strong>signature</strong>, and the <strong>MRZ</strong> (the two lines of &lt;&lt;&lt; text at the bottom).
+            Faites glisser la souris sur l'image pour tracer un rectangle noir sur un champ que vous ne
+            voulez pas transmettre. Sur une carte nationale d'identité française, on masque généralement
+            le <strong>numéro de document</strong>, la <strong>signature</strong>, et la <strong>MRZ</strong>
+            (les deux lignes de &lt;&lt;&lt; en bas). Sur un passeport, on cache en plus le numéro et la MRZ.
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
           </div>
           <div class="actions">
-            <button type="button" id="undo">Undo last blackout</button>
-            <button type="button" id="clear-blackouts" class="danger">Clear all blackouts</button>
-            <button type="button" id="download" class="primary">⬇ Download watermarked copy (JPEG)</button>
+            <button type="button" id="undo">Annuler le dernier masquage</button>
+            <button type="button" id="clear-blackouts" class="danger">Effacer tous les masquages</button>
+            <button type="button" id="download" class="primary">⬇ Télécharger la copie filigranée (JPEG)</button>
           </div>
           <p class="hint" style="margin-top: 12px;">
-            Tip: the watermark updates live as you type. Make the purpose specific (who it's for, what it's for)
-            so the copy is obviously single-use.
+            Astuce : le filigrane se met à jour en direct. Formulez la finalité précisément (pour qui, pour
+            quoi) afin que la copie soit visiblement à usage unique.
           </p>
         </div>
       </section>
 
       <section class="card privacy-card">
-        <h2>🔒 Your image never leaves this browser tab</h2>
+        <h2>🔒 Votre image ne quitte jamais cet onglet</h2>
         <ul>
-          <li>No upload servers. No API calls. No analytics. No trackers.</li>
-          <li>Everything runs in pure JavaScript on your device.</li>
-          <li>Nothing is saved — not in cookies, not in localStorage, not anywhere.</li>
-          <li>Refresh the page and it's gone. Close the tab and it's gone.</li>
-          <li>You can even save this page (Ctrl+S / ⌘+S) and use it fully offline.</li>
+          <li>Aucun serveur d'upload. Aucun appel d'API. Aucune analytique. Aucun traqueur.</li>
+          <li>Tout s'exécute en JavaScript pur, sur votre appareil.</li>
+          <li>Rien n'est enregistré — ni dans les cookies, ni dans le localStorage, nulle part.</li>
+          <li>Rafraîchissez la page, tout est effacé. Fermez l'onglet, tout est effacé.</li>
+          <li>Vous pouvez même enregistrer la page (Ctrl+S / ⌘+S) et l'utiliser totalement hors ligne.</li>
           <li>
-            This page deliberately pulls in <em>zero</em> third-party scripts at runtime — not even for things
-            like HEIC decoding — so there is no CDN that could be compromised to attack your copy of the page.
+            Cette page ne charge <em>aucun</em> script tiers à l'exécution — pas même pour décoder le
+            HEIC — il n'y a donc aucun CDN qui pourrait être compromis pour attaquer votre copie de la page.
           </li>
         </ul>
         <p style="margin-bottom: 0;">
-          This matters because a photo of your ID is sensitive data: it contains your full name, date of birth,
-          document number, signature, photo, and — on Dutch documents — your BSN. Handing that around
-          unprotected is a favourite ingredient for identity fraud.
+          Cela compte, car la photo de votre pièce d'identité est une donnée sensible : elle contient vos
+          noms et prénoms, votre date de naissance, le numéro du document, votre signature et votre photo
+          — l'ingrédient idéal pour une usurpation d'identité.
         </p>
       </section>
 
       <section class="card">
-        <h2>What the Dutch government recommends</h2>
+        <h2>Ce que recommande la CNIL</h2>
         <p>
-          Two official sources give consistent advice for sharing a copy of a Dutch ID document:
-          <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
-          (the central government portal) and the
-          <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>
-          (the Dutch Data Protection Authority). In short:
+          En France, la
+          <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>
+          (Commission nationale de l'informatique et des libertés) est très concrète sur la transmission
+          d'une copie de pièce d'identité. En résumé :
         </p>
         <ul>
-          <li>Make your <strong>BSN</strong> (burgerservicenummer / citizen service number) unreadable on the copy — <em>including</em> in the machine-readable digits at the bottom of the document.</li>
-          <li>You are allowed to black out your <strong>passport photo</strong> and <strong>signature</strong> too.</li>
-          <li>Write on the copy that it is a <strong>copy</strong>, and for whom / for what product or purpose the copy is intended.</li>
-          <li>Write on the copy the <strong>date</strong> on which you're giving the copy away.</li>
+          <li>N'envoyez une copie que si c'est <strong>strictement nécessaire</strong> — et jamais par un canal non sécurisé.</li>
+          <li>Apposez un <strong>filigrane visible</strong> précisant le destinataire, la finalité et la date. Exemple donné par la CNIL : <em>« Document transmis uniquement pour l'ouverture d'un compte chez [organisme] – [date] »</em>.</li>
+          <li>Limitez la <strong>résolution</strong> et la qualité du fichier pour qu'il soit difficilement réutilisable ailleurs.</li>
+          <li>Masquez ce qui n'est pas nécessaire à la vérification (numéro de document, MRZ, signature).</li>
         </ul>
-        <p>
-          The Autoriteit Persoonsgegevens is explicit that some organisations — for example telecom providers
-          and car rental companies — are not even allowed to process your BSN and passport photo, and must
-          block them out themselves if they make a copy.
-        </p>
         <p style="margin-bottom: 0;">
-          Good to know: for Dutch passports and ID cards issued from <strong>2 August 2021</strong> onwards, the BSN is no
-          longer printed on the front of the document at all — it's encoded in a QR code on the back, so a plain
-          scan of the front no longer exposes it. Older documents still print the BSN and need it blacked out.
+          La CNIL rappelle aussi qu'un commerçant, un hôtel ou un bailleur ne peut pas exiger une copie
+          non filigranée : une demande d'original non annoté doit généralement vous alerter.
         </p>
       </section>
 
       <section class="card">
-        <h2>Similar advice from other European regulators</h2>
+        <h2>Recommandations des autres autorités européennes</h2>
         <p>
-          Several other EU data-protection authorities publish peer-level advice: redact the fields the
-          recipient doesn't strictly need, and stamp the copy with the purpose and date. This tool works
-          for any of them — just fill in the purpose field with whatever wording their regulator
-          recommends.
+          Plusieurs autorités européennes de protection des données publient des consignes aussi concrètes
+          que celles de la CNIL : masquer les champs non indispensables et apposer un filigrane précisant
+          la finalité et la date. Ce site fonctionne pour n'importe laquelle d'entre elles — il suffit de
+          recopier la formulation recommandée dans le champ « Finalité ».
         </p>
         <ul>
           <li>
-            <strong>France — <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>.</strong>
-            Apply a visible watermark naming the recipient, purpose, and date — CNIL's own example wording is
-            <em>"Document transmis uniquement pour l'ouverture d'un compte chez [organisme] – [date]"</em>.
-            CNIL also recommends limiting the resolution of the copy so it is harder to reuse.
+            <strong>Pays-Bas — <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.</strong>
+            Masquer le BSN (numéro national), la photo et la signature, y compris dans la MRZ. Indiquer
+            sur la copie qu'il s'agit d'une copie, la finalité et la date. Pour les documents émis à
+            partir du 2 août 2021, le BSN n'est plus imprimé au recto.
           </li>
           <li>
-            <strong>Germany — <a href="https://www.verbraucherzentrale-niedersachsen.de/themen/internet-telefon/datenschutz/ausweiskopien-wasserzeichen-so-schuetzen-sie-sich-vor-identitaetsdiebstahl" target="_blank" rel="noopener">Verbraucherzentrale Niedersachsen</a>.</strong>
-            On a Personalausweis, black out the document number, access/serial number, eye colour, height,
-            nationality, signature, and place/date of birth, then add a watermark naming the recipient and
-            purpose. Since the 2017 PAuswG change, only name, address, date of birth, and validity normally
-            need to remain for identity checks.
+            <strong>Allemagne — <a href="https://www.verbraucherzentrale-niedersachsen.de/themen/internet-telefon/datenschutz/ausweiskopien-wasserzeichen-so-schuetzen-sie-sich-vor-identitaetsdiebstahl" target="_blank" rel="noopener">Verbraucherzentrale Niedersachsen</a>.</strong>
+            Sur un Personalausweis, masquer le numéro de document, le numéro d'accès/série, la couleur
+            des yeux, la taille, la nationalité, la signature, le lieu et la date de naissance, puis
+            apposer un filigrane avec destinataire et finalité. Depuis la réforme du PAuswG de 2017,
+            seuls le nom, l'adresse, la date de naissance et la validité doivent rester lisibles.
           </li>
           <li>
-            <strong>Spain — <a href="https://www.aepd.es/preguntas-frecuentes/1-tus-derechos/3-identificacion-con-dni/FAQ-0116-que-puedo-hacer-si-me-solicitan-una-copia-del-dni" target="_blank" rel="noopener">AEPD</a>.</strong>
-            On the front of a DNI, erase or blur the support number, sex, nationality, date of birth and
-            signature; on the back, the address, place of birth and parents' names. Only name, surnames,
-            document number and photo need to remain — plus a visible note with the purpose and date.
+            <strong>Espagne — <a href="https://www.aepd.es/preguntas-frecuentes/1-tus-derechos/3-identificacion-con-dni/FAQ-0116-que-puedo-hacer-si-me-solicitan-una-copia-del-dni" target="_blank" rel="noopener">AEPD</a>.</strong>
+            Au recto du DNI, masquer le numéro de support, le sexe, la nationalité, la date de naissance
+            et la signature ; au verso, l'adresse, le lieu de naissance et les noms des parents. Seuls le
+            nom, les prénoms, le numéro du document et la photo doivent subsister — avec une mention
+            visible de la finalité et de la date.
           </li>
           <li>
-            <strong>Belgium — <a href="https://www.gegevensbeschermingsautoriteit.be/burger/thema-s/elektronische-identiteitskaart-eid/praktische-toepassingen" target="_blank" rel="noopener">Gegevensbeschermingsautoriteit (APD/GBA)</a>.</strong>
-            Provide only a crossed-out (<em>doorstreept</em>) copy, obscuring any field that isn't strictly
-            needed — especially the rijksregisternummer, eID card number, validity dates, gender,
-            nationality, and place/date of birth — and write on the copy the name of the recipient and the
-            specific authorised use.
+            <strong>Belgique — <a href="https://www.gegevensbeschermingsautoriteit.be/burger/thema-s/elektronische-identiteitskaart-eid/praktische-toepassingen" target="_blank" rel="noopener">Autorité de protection des données (APD)</a>.</strong>
+            Ne transmettre qu'une copie <em>barrée</em>, en recouvrant tout champ non indispensable —
+            notamment le numéro de registre national, le numéro de carte eID, les dates de validité,
+            le sexe, la nationalité, le lieu et la date de naissance. Indiquer sur la copie le destinataire
+            et l'usage autorisé.
           </li>
           <li>
-            <strong>Poland — <a href="https://uodo.gov.pl/pl/138/2476" target="_blank" rel="noopener">UODO</a>.</strong>
-            Where a copy of a <em>dowód osobisty</em> is truly unavoidable, obscure every field the
-            contract's purpose doesn't strictly require. UODO's preferred practice is that the document is
-            shown in person rather than copied at all.
+            <strong>Pologne — <a href="https://uodo.gov.pl/pl/138/2476" target="_blank" rel="noopener">UODO</a>.</strong>
+            Lorsqu'une copie du <em>dowód osobisty</em> est vraiment inévitable, masquer tout champ non
+            strictement nécessaire à la finalité du contrat. La pratique préférée par l'UODO reste que
+            le document soit présenté en personne plutôt que copié.
           </li>
         </ul>
         <p style="margin-bottom: 0;">
-          The common thread in all of these — and in the Dutch guidance above — is the same: share the
-          minimum, watermark with purpose and date, and keep a record of who received the copy.
+          Le fil rouge est partout le même : partager le minimum, filigraner avec la finalité et la date,
+          et noter à qui la copie a été remise.
         </p>
       </section>
 
       <section class="card">
-        <h2>What about the UK?</h2>
+        <h2>Et au Royaume-Uni ?</h2>
         <p>
-          UK consumer guidance on identity-document safety is spread across three main bodies, and — unlike
-          the Dutch sources — none of them publish a step-by-step "how to redact your passport copy"
-          procedure. Their advice leans heavily on prevention, reporting, and protective registration:
+          Au Royaume-Uni, les conseils grand public sur la sécurité des pièces d'identité sont répartis
+          entre trois organismes, et — à la différence de la CNIL ou des autorités néerlandaise et
+          allemande — aucun ne publie de procédure détaillée de masquage d'une copie de passeport.
+          L'accent y est mis sur la prévention, le signalement et l'enregistrement protecteur :
         </p>
         <ul>
           <li>
-            <a href="https://ico.org.uk/for-the-public/identity-theft/" target="_blank" rel="noopener">Information Commissioner's Office (ICO) — Identity theft</a>:
-            the UK regulator's consumer page. It explains the warning signs and what to do if you think your
-            personal data has been compromised, and advises reporting lost or stolen ID documents to the
-            issuing body.
+            <a href="https://ico.org.uk/for-the-public/identity-theft/" target="_blank" rel="noopener">Information Commissioner's Office (ICO) — Identity theft</a> :
+            la page consommateur du régulateur britannique. Elle explique les signaux d'alerte, que faire
+            en cas de compromission de vos données, et conseille de signaler la perte ou le vol à
+            l'organisme émetteur.
           </li>
           <li>
-            <a href="https://www.actionfraud.police.uk/a-z-of-fraud/identity-fraud-and-identity-theft" target="_blank" rel="noopener">Action Fraud — Identity fraud and identity theft</a>:
-            the UK's national reporting centre for fraud. Recommends keeping personal documents locked away,
-            destroying anything with your name on it before binning it, and reporting lost or stolen passports
-            to HM Passport Office.
+            <a href="https://www.actionfraud.police.uk/a-z-of-fraud/identity-fraud-and-identity-theft" target="_blank" rel="noopener">Action Fraud — Identity fraud and identity theft</a> :
+            le centre national britannique de signalement des fraudes. Il recommande de conserver ses
+            documents à l'abri, de détruire tout document nominatif avant de le jeter, et de signaler
+            toute perte de passeport à HM Passport Office.
           </li>
           <li>
-            <a href="https://www.cifas.org.uk/services/identity-protection" target="_blank" rel="noopener">Cifas — Identity protection</a>:
-            the UK's fraud-prevention service. You can pay a small fee for <em>Protective Registration</em>
-            so that any credit or account applications in your name get extra checks.
+            <a href="https://www.cifas.org.uk/services/identity-protection" target="_blank" rel="noopener">Cifas — Identity protection</a> :
+            le service britannique de prévention de la fraude. Pour une petite somme, une
+            <em>Protective Registration</em> ajoute des contrôles supplémentaires sur tout crédit ou
+            compte ouvert en votre nom.
           </li>
         </ul>
         <p style="margin-bottom: 0;">
-          The underlying principle is the same in every country: share the minimum, to the minimum number of
-          people, for the minimum time, and keep a record of who you sent it to. Redacting what a recipient
-          doesn't strictly need, and stamping the copy with its purpose, travels well across jurisdictions —
-          even if only the Dutch government happens to spell it out in that much detail.
+          Le principe sous-jacent est universel : partager le moins possible, avec le moins de personnes
+          possible, pendant le moins de temps possible, et garder trace des envois. Masquer l'inutile et
+          estampiller la copie fonctionne partout, même si seules quelques autorités le détaillent à ce
+          point.
         </p>
       </section>
 
       <section class="card">
-        <h2>Before you send your copy</h2>
+        <h2>Avant d'envoyer votre copie</h2>
         <ul>
-          <li>Double-check the downloaded image: is your BSN really covered? Is the watermark readable?</li>
-          <li>Prefer sending via an end-to-end encrypted channel. Avoid regular email if you can.</li>
-          <li>Keep a note of the recipient and date. If the copy ever surfaces elsewhere you know who had it.</li>
-          <li>Legally, in the Netherlands a shop, hotel, gym, or landlord is usually not allowed to demand an unredacted copy of your ID. Asking for one is often a red flag.</li>
+          <li>Revérifiez l'image téléchargée : le numéro de document est-il bien couvert ? Le filigrane est-il lisible ?</li>
+          <li>Privilégiez un canal chiffré de bout en bout. Évitez l'e-mail classique si possible.</li>
+          <li>Notez le destinataire et la date. Si la copie réapparaît ailleurs, vous saurez qui l'avait reçue.</li>
+          <li>En France, un commerçant, un hôtel ou un bailleur ne peut pas exiger une copie non filigranée de votre pièce d'identité : une demande de copie « brute » doit généralement vous alerter.</li>
         </ul>
       </section>
 
       <footer>
-        A small open-source experiment that follows the advice of
-        <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
-        and the
-        <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.
-        No data is collected — don't take our word for it:
-        <a href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">read the source on GitHub</a>.
+        Un petit projet open source qui suit les recommandations de la
+        <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>
+        et de l'
+        <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a> néerlandaise.
+        Aucune donnée n'est collectée — ne nous croyez pas sur parole :
+        <a href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">consultez le code source sur GitHub</a>.
       </footer>
     </main>
   </div>
@@ -602,14 +600,14 @@
       function loadFile(file) {
         if (isHeicFile(file)) {
           dropLabel.textContent =
-            'HEIC files can\'t be decoded safely in the browser without a third-party library. ' +
-            'Please convert the photo to JPEG or PNG first — see the instructions below.';
+            'Les fichiers HEIC ne peuvent pas être décodés en toute sécurité dans le navigateur sans bibliothèque tierce. ' +
+            'Merci de convertir la photo en JPEG ou PNG d\'abord — voir les instructions ci-dessous.';
           const help = document.getElementById('heic-help');
           if (help) help.open = true;
           return;
         }
         if (!file.type || !file.type.startsWith('image/')) {
-          dropLabel.textContent = 'That file is not an image. Try again.';
+          dropLabel.textContent = 'Ce fichier n\'est pas une image. Veuillez réessayer.';
           return;
         }
         const reader = new FileReader();
@@ -625,12 +623,12 @@
           canvas.height = img.naturalHeight;
           blackouts = [];
           editor.hidden = false;
-          dropLabel.textContent = (name ? name + ' — ' : '') + 'loaded locally. Drop a new image to replace.';
+          dropLabel.textContent = (name ? name + ' — ' : '') + 'chargé localement. Déposez une autre image pour la remplacer.';
           render();
           editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
         img.onerror = () => {
-          dropLabel.textContent = 'Could not read that image. Try a different file.';
+          dropLabel.textContent = 'Impossible de lire cette image. Essayez un autre fichier.';
         };
         img.src = url;
       }
@@ -649,7 +647,7 @@
         camStatus.textContent = '';
         camStatus.classList.remove('error');
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          camStatus.textContent = 'This browser does not support live camera access. Use "Choose an existing image" instead.';
+          camStatus.textContent = 'Ce navigateur ne prend pas en charge l\'accès direct à la caméra. Utilisez plutôt « Choisir une image existante ».';
           camStatus.classList.add('error');
           return;
         }
@@ -665,7 +663,7 @@
           cameraPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch (err) {
           cameraPanel.hidden = false;
-          camStatus.textContent = 'Camera access denied or unavailable: ' + err.message;
+          camStatus.textContent = 'Accès à la caméra refusé ou indisponible : ' + err.message;
           camStatus.classList.add('error');
         }
       }
@@ -785,9 +783,9 @@
       }
 
       function drawWatermark() {
-        const purpose = (purposeEl.value || '').trim() || '(purpose not set)';
+        const purpose = (purposeEl.value || '').trim() || '(finalité non renseignée)';
         const dateStr = formatDate(dateEl.value);
-        const text = 'KOPIE  •  ' + purpose + '  •  ' + dateStr;
+        const text = 'COPIE  •  ' + purpose + '  •  ' + dateStr;
 
         const w = canvas.width;
         const h = canvas.height;
@@ -810,10 +808,10 @@
       }
 
       function formatDate(iso) {
-        if (!iso) return '(date not set)';
+        if (!iso) return '(date non renseignée)';
         const parts = iso.split('-');
         if (parts.length !== 3) return iso;
-        return parts[2] + '-' + parts[1] + '-' + parts[0]; // DD-MM-YYYY, Dutch style
+        return parts[2] + '/' + parts[1] + '/' + parts[0]; // JJ/MM/AAAA
       }
 
       // Reset file input so choosing the same file twice still fires 'change'
