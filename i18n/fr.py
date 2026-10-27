@@ -56,12 +56,17 @@ BODY = """\
         <p class="hint">Choisissez un fichier sur votre appareil ou prenez une photo avec votre caméra. Dans les deux cas, l'image reste entièrement dans ce navigateur.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Déposez une image ici ou cliquez pour choisir un fichier (JPEG ou PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>Une photo <code>.HEIC</code> prise avec un iPhone ? Voici comment la convertir</summary>
+          <p>
+            Directement sur un iPhone ou un iPad, vous n'avez en général rien à faire : quand vous choisissez une photo
+            ici, iOS transmet automatiquement un JPEG à la page. Les étapes ci-dessous concernent les fichiers HEIC
+            copiés sur un ordinateur.
+          </p>
           <p>
             HEIC est le format photo par défaut d'Apple. Ce site n'embarque volontairement aucun décodeur
             HEIC, car tout décodeur tiers chargé à l'exécution constituerait un risque pour une page qui
@@ -181,12 +186,21 @@ BODY = """\
         <ul>
           <li>N'envoyez une copie que si c'est <strong>strictement nécessaire</strong> — et jamais par un canal non sécurisé.</li>
           <li>Apposez un <strong>filigrane visible</strong> précisant le destinataire, la finalité et la date. Exemple donné par la CNIL : <em>« Document transmis uniquement pour l'ouverture d'un compte chez [organisme] – [date] »</em>.</li>
-          <li>Limitez la <strong>résolution</strong> et la qualité du fichier pour qu'il soit difficilement réutilisable ailleurs.</li>
+          <li>Limitez la <strong>résolution</strong> et la qualité du fichier pour qu'il soit difficilement réutilisable ailleurs — cette page le fait pour vous (option cochée par défaut).</li>
           <li>Masquez ce qui n'est pas nécessaire à la vérification (numéro de document, MRZ, signature).</li>
         </ul>
-        <p style="margin-bottom: 0;">
+        <p>
           La CNIL rappelle aussi qu'un commerçant, un hôtel ou un bailleur ne peut pas exiger une copie
           non filigranée : une demande d'original non annoté doit généralement vous alerter.
+        </p>
+        <p style="margin-bottom: 0;">
+          L'État propose aussi un service gratuit,
+          <a href="https://filigrane.beta.gouv.fr/" target="_blank" rel="noopener">Filigrane Facile</a>,
+          pour apposer un filigrane sur vos documents. Il fonctionne différemment : vos fichiers sont
+          <strong>envoyés sur ses serveurs</strong> pour y être traités, puis supprimés. Cette page, elle,
+          <strong>n'utilise aucun serveur</strong> : votre pièce d'identité ne quitte jamais votre appareil,
+          <strong>sans cookies ni traceurs</strong>, et vous pouvez masquer les champs inutiles avant
+          d'apposer le filigrane.
         </p>
       </section>
 

@@ -56,12 +56,16 @@ BODY = """\
         <p class="hint">Wählen Sie eine Datei von Ihrem Gerät aus oder machen Sie ein Foto mit Ihrer Kamera. Beides bleibt vollständig in diesem Browser.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Bild hierher ziehen oder klicken, um eine Datei auszuwählen (JPEG oder PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>Sie haben ein <code>.HEIC</code>-Foto vom iPhone? So konvertieren Sie es</summary>
+          <p>
+            Direkt auf dem iPhone oder iPad müssen Sie meist nichts tun: Wenn Sie hier ein Foto auswählen, übergibt iOS
+            der Seite automatisch ein JPEG. Die Schritte unten gelten für HEIC-Dateien, die Sie auf einen Computer kopiert haben.
+          </p>
           <p>
             HEIC ist das Standard-Fotoformat von Apple. Dieses Tool bindet bewusst keinen HEIC-Decoder ein,
             denn jeder zur Laufzeit geladene Decoder eines Drittanbieters wäre ein Supply-Chain-Risiko für

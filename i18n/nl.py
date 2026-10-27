@@ -14,8 +14,10 @@ LD_DESC = 'Een browsertool die persoonsgegevens afschermt en een watermerk met d
 
 # (English source, translation) pairs for user-facing strings inside the <script>.
 JS = [
-    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +\n            'Please convert the photo to JPEG or PNG first — see the instructions below.'",
-     "'HEIC-bestanden kunnen niet veilig in de browser worden geopend zonder externe bibliotheek. ' +\n            'Zet de foto eerst om naar JPEG of PNG — zie de uitleg hieronder.'"),
+    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +",
+     "'HEIC-bestanden kunnen niet veilig in de browser worden geopend zonder externe bibliotheek. ' +"),
+    ("'Please convert the photo to JPEG or PNG first — see the instructions below.'",
+     "'Zet de foto eerst om naar JPEG of PNG — zie de uitleg hieronder.'"),
     ("'That file is not an image. Try again.'",
      "'Dat bestand is geen afbeelding. Probeer het opnieuw.'"),
     ("'loaded locally. Drop a new image to replace.'",
@@ -51,12 +53,16 @@ BODY = """\
         <p class="hint">Kies een bestand op je apparaat of maak een foto met je camera. In beide gevallen blijft de afbeelding in deze browser.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Sleep een afbeelding hierheen of klik om een bestand te kiezen (JPEG of PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>Een <code>.HEIC</code>-foto van een iPhone? Zo zet je die eerst om</summary>
+          <p>
+            Op een iPhone of iPad zelf hoef je meestal niets te doen: als je hier een foto kiest, geeft iOS de pagina
+            automatisch een JPEG. De stappen hieronder zijn voor HEIC-bestanden die je naar een computer hebt gekopieerd.
+          </p>
           <p>
             HEIC is het standaard fotoformaat van Apple. Deze tool bevat bewust geen HEIC-decoder, omdat elke
             externe decoder die tijdens het gebruik wordt geladen een supply-chain-risico is voor een pagina die

@@ -14,8 +14,10 @@ LD_DESC = 'Una herramienta que funciona solo en el navegador: tacha datos person
 
 # (English source, translation) pairs for user-facing strings inside the <script>.
 JS = [
-    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +\n            'Please convert the photo to JPEG or PNG first — see the instructions below.'",
-     "'Los archivos HEIC no se pueden abrir de forma segura en el navegador sin una biblioteca externa. ' +\n            'Convierte primero la foto a JPEG o PNG; consulta las instrucciones de abajo.'"),
+    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +",
+     "'Los archivos HEIC no se pueden abrir de forma segura en el navegador sin una biblioteca externa. ' +"),
+    ("'Please convert the photo to JPEG or PNG first — see the instructions below.'",
+     "'Convierte primero la foto a JPEG o PNG; consulta las instrucciones de abajo.'"),
     ("'That file is not an image. Try again.'",
      "'Ese archivo no es una imagen. Inténtalo de nuevo.'"),
     ("'loaded locally. Drop a new image to replace.'",
@@ -51,12 +53,16 @@ BODY = """\
         <p class="hint">Elige un archivo de tu dispositivo o haz una foto con la cámara. En ambos casos la imagen no sale de este navegador.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Arrastra una imagen aquí o haz clic para elegir un archivo (JPEG o PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>¿Tienes una foto <code>.HEIC</code> de un iPhone? Cómo convertirla primero</summary>
+          <p>
+            En el propio iPhone o iPad normalmente no tienes que hacer nada: al elegir una foto aquí, iOS entrega
+            automáticamente un JPEG a la página. Los pasos de abajo son para archivos HEIC que hayas copiado a un ordenador.
+          </p>
           <p>
             HEIC es el formato de foto por defecto de Apple. Esta herramienta no incluye a propósito ningún
             decodificador HEIC, porque cualquier decodificador externo cargado en tiempo de ejecución sería un

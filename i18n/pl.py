@@ -14,8 +14,10 @@ LD_DESC = 'Narzędzie działające wyłącznie w przeglądarce: zasłania dane o
 
 # (English source, translation) pairs for user-facing strings inside the <script>.
 JS = [
-    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +\n            'Please convert the photo to JPEG or PNG first — see the instructions below.'",
-     "'Plików HEIC nie da się bezpiecznie otworzyć w przeglądarce bez zewnętrznej biblioteki. ' +\n            'Najpierw przekonwertuj zdjęcie do JPEG lub PNG — instrukcja poniżej.'"),
+    ("'HEIC files can\\'t be decoded safely in the browser without a third-party library. ' +",
+     "'Plików HEIC nie da się bezpiecznie otworzyć w przeglądarce bez zewnętrznej biblioteki. ' +"),
+    ("'Please convert the photo to JPEG or PNG first — see the instructions below.'",
+     "'Najpierw przekonwertuj zdjęcie do JPEG lub PNG — instrukcja poniżej.'"),
     ("'That file is not an image. Try again.'",
      "'Ten plik nie jest obrazem. Spróbuj ponownie.'"),
     ("'loaded locally. Drop a new image to replace.'",
@@ -51,12 +53,16 @@ BODY = """\
         <p class="hint">Wybierz plik z urządzenia albo zrób zdjęcie aparatem. W obu przypadkach obraz pozostaje w tej przeglądarce.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Upuść obraz tutaj lub kliknij, aby wybrać plik (JPEG lub PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>Masz zdjęcie <code>.HEIC</code> z iPhone'a? Jak je najpierw przekonwertować</summary>
+          <p>
+            Na samym iPhonie lub iPadzie zwykle nie trzeba nic robić: gdy wybierzesz tu zdjęcie, iOS automatycznie
+            przekaże stronie plik JPEG. Poniższe kroki dotyczą plików HEIC skopiowanych na komputer.
+          </p>
           <p>
             HEIC to domyślny format zdjęć Apple. To narzędzie celowo nie zawiera dekodera HEIC, bo każdy
             zewnętrzny dekoder ładowany w trakcie działania byłby ryzykiem w łańcuchu dostaw dla strony, która

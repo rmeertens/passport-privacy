@@ -366,12 +366,16 @@
         <p class="hint">Wybierz plik z urządzenia albo zrób zdjęcie aparatem. W obu przypadkach obraz pozostaje w tej przeglądarce.</p>
 
         <label class="file-drop" id="drop">
-          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <input type="file" id="file" accept="image/*" />
           <span id="drop-label">Upuść obraz tutaj lub kliknij, aby wybrać plik (JPEG lub PNG)</span>
         </label>
 
         <details id="heic-help" class="heic-help">
           <summary>Masz zdjęcie <code>.HEIC</code> z iPhone'a? Jak je najpierw przekonwertować</summary>
+          <p>
+            Na samym iPhonie lub iPadzie zwykle nie trzeba nic robić: gdy wybierzesz tu zdjęcie, iOS automatycznie
+            przekaże stronie plik JPEG. Poniższe kroki dotyczą plików HEIC skopiowanych na komputer.
+          </p>
           <p>
             HEIC to domyślny format zdjęć Apple. To narzędzie celowo nie zawiera dekodera HEIC, bo każdy
             zewnętrzny dekoder ładowany w trakcie działania byłby ryzykiem w łańcuchu dostaw dla strony, która
@@ -649,24 +653,27 @@
       }
 
       function loadFile(file) {
-        if (isHeicFile(file)) {
-          dropLabel.textContent =
-            'Plików HEIC nie da się bezpiecznie otworzyć w przeglądarce bez zewnętrznej biblioteki. ' +
-            'Najpierw przekonwertuj zdjęcie do JPEG lub PNG — instrukcja poniżej.';
-          const help = document.getElementById('heic-help');
-          if (help) help.open = true;
-          return;
-        }
-        if (!file.type || !file.type.startsWith('image/')) {
+        const heic = isHeicFile(file);
+        if (!heic && (!file.type || !file.type.startsWith('image/'))) {
           dropLabel.textContent = 'Ten plik nie jest obrazem. Spróbuj ponownie.';
           return;
         }
         const reader = new FileReader();
-        reader.onload = () => loadDataUrl(reader.result, file.name);
+        reader.onload = () => loadDataUrl(reader.result, file.name, heic);
         reader.readAsDataURL(file);
       }
 
-      function loadDataUrl(url, name) {
+      // Recent Safari decodes HEIC natively, so HEIC files are tried like any other
+      // image; the conversion steps are only shown when this browser can't open one.
+      function showHeicHelp() {
+        dropLabel.textContent =
+          'Plików HEIC nie da się bezpiecznie otworzyć w przeglądarce bez zewnętrznej biblioteki. ' +
+          'Najpierw przekonwertuj zdjęcie do JPEG lub PNG — instrukcja poniżej.';
+        const help = document.getElementById('heic-help');
+        if (help) help.open = true;
+      }
+
+      function loadDataUrl(url, name, heic) {
         const img = new Image();
         img.onload = () => {
           image = img;
@@ -679,6 +686,7 @@
           editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
         img.onerror = () => {
+          if (heic) { showHeicHelp(); return; }
           dropLabel.textContent = 'Nie udało się odczytać obrazu. Spróbuj innego pliku.';
         };
         img.src = url;
