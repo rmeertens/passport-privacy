@@ -2,7 +2,7 @@
 
 A tiny, single-page browser tool for safely sharing a copy of your passport or ID card.
 
-Live at **[passport-privacy.meertens.dev](https://passport-privacy.meertens.dev/)**.
+Live at **[passport-privacy.meertens.dev](https://passport-privacy.meertens.dev/)** in English, Dutch (`/nl/`), Spanish (`/es/`), and Polish (`/pl/`).
 
 ## What it does
 
@@ -40,8 +40,11 @@ Plain HTML + CSS + a single inline `<script>`. No build step, no dependencies, n
 ## Repository layout
 
 ```
-index.html      Served at /
-sitemap.xml     Sitemap with hreflang alternates
+index.html      English version (served at /)
+nl/index.html   Dutch version   (served at /nl/)
+es/index.html   Spanish version (served at /es/)
+pl/index.html   Polish version  (served at /pl/)
+sitemap.xml     Lists all language variants with hreflang alternates
 robots.txt      Points crawlers at the sitemap
 CNAME           Custom domain for GitHub Pages
 ```

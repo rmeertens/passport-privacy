@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kopia dowodu osobistego – znak wodny i zasłanianie danych</title>
+  <meta name="description" content="Dodaj znak wodny i zasłoń dane osobowe na kopii dowodu osobistego lub paszportu — w całości w przeglądarce. Nic nie jest wysyłane ani zapisywane." />
+  <link rel="canonical" href="https://passport-privacy.meertens.dev/pl/" />
+  <link rel="alternate" hreflang="en" href="https://passport-privacy.meertens.dev/" />
+  <link rel="alternate" hreflang="nl" href="https://passport-privacy.meertens.dev/nl/" />
+  <link rel="alternate" hreflang="es" href="https://passport-privacy.meertens.dev/es/" />
+  <link rel="alternate" hreflang="pl" href="https://passport-privacy.meertens.dev/pl/" />
+  <link rel="alternate" hreflang="x-default" href="https://passport-privacy.meertens.dev/" />
+  <meta name="theme-color" content="#1d4ed8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Passport Privacy" />
+  <meta property="og:url" content="https://passport-privacy.meertens.dev/pl/" />
+  <meta property="og:title" content="Bezpieczna kopia dowodu: znak wodny i zasłanianie danych" />
+  <meta property="og:description" content="Zasłoń dane osobowe i dodaj znak wodny do kopii dowodu osobistego lub paszportu — w całości w przeglądarce. Bez wysyłania, bez śledzenia." />
+  <meta property="og:image" content="https://passport-privacy.meertens.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Makieta paszportu z zasłoniętymi polami i ukośnym znakiem wodnym COPY, obok nagłówek 'Watermark your ID copy.'" />
+  <meta property="og:locale" content="pl_PL" />
+  <meta property="og:locale:alternate" content="en_GB" />
+  <meta property="og:locale:alternate" content="nl_NL" />
+  <meta property="og:locale:alternate" content="es_ES" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bezpieczna kopia dowodu: znak wodny i zasłanianie danych" />
+  <meta name="twitter:description" content="Zasłoń dane i dodaj znak wodny do kopii dowodu — w całości w przeglądarce. Bez wysyłania, bez śledzenia." />
+  <meta name="twitter:image" content="https://passport-privacy.meertens.dev/og-image.png" />
+  <meta name="twitter:image:alt" content="Makieta paszportu z zasłoniętymi polami i ukośnym znakiem wodnym COPY." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Bezpieczna kopia dowodu osobistego lub paszportu – znak wodny i zasłanianie danych",
+    "description": "Narzędzie działające wyłącznie w przeglądarce: zasłania dane osobowe i dodaje znak wodny z celem i datą do kopii dowodu osobistego lub paszportu. Bez wysyłania, bez śledzenia — dane nigdy nie opuszczają Twojego urządzenia.",
+    "url": "https://passport-privacy.meertens.dev/pl/",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Any (modern browser)",
+    "browserRequirements": "Requires JavaScript. Requires HTML5 canvas.",
+    "inLanguage": "pl",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR"
+    }
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-soft: #ffffff;
+      --card: #ffffff;
+      --card-strong: #ffffff;
+      --text: #0b1f3a;
+      --muted: #475569;
+      --accent: #1d4ed8;
+      --accent-2: #047857;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --border: #e2e8f0;
+      --shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(29, 78, 216, 0.06), transparent 40%),
+        radial-gradient(circle at top right, rgba(4, 120, 87, 0.05), transparent 35%),
+        linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .page-shell {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 72px;
+    }
+
+    a { color: var(--accent); }
+
+    .hero { padding: 24px 0 12px; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.78rem;
+      color: var(--accent-2);
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.05;
+      margin: 0;
+    }
+    .hero-copy {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 18px 0 0;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back:hover { color: var(--accent); }
+
+    .lang-switch {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #ffffff;
+      margin-bottom: 18px;
+      font-size: 0.85rem;
+    }
+    .lang-switch a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .lang-switch a:hover { color: var(--text); background: #f1f5f9; }
+    .lang-switch a[aria-current="page"] {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    .privacy-card {
+      border-color: rgba(4, 120, 87, 0.35);
+      background: linear-gradient(145deg, rgba(4, 120, 87, 0.06), #ffffff);
+    }
+    .privacy-card h2 { margin-top: 0; }
+    .privacy-card ul { line-height: 1.75; color: var(--muted); }
+
+    h2 { margin: 0 0 14px; font-size: 1.35rem; }
+    p  { color: var(--muted); line-height: 1.7; }
+    ul { padding-left: 20px; }
+
+    .tool h2 { margin-top: 28px; }
+    .tool h2:first-child { margin-top: 0; }
+
+    .file-drop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      border: 2px dashed rgba(29, 78, 216, 0.4);
+      border-radius: 16px;
+      background: rgba(29, 78, 216, 0.04);
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .file-drop:hover, .file-drop.over {
+      background: rgba(29, 78, 216, 0.08);
+      color: var(--text);
+      border-color: var(--accent);
+    }
+    .file-drop input { display: none; }
+
+    .upload-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 560px) {
+      .upload-row { grid-template-columns: 1fr; }
+    }
+
+    button, .btn {
+      font: inherit;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    button:hover, .btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+    button.primary, .btn.primary {
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      color: white;
+      border-color: transparent;
+    }
+    button.primary:hover, .btn.primary:hover { filter: brightness(1.05); }
+    button.danger { color: var(--danger); border-color: rgba(185, 28, 28, 0.35); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    input[type="text"], input[type="date"] {
+      font: inherit;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+    }
+    input[type="text"]:focus, input[type="date"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    }
+
+    .hint { font-size: 0.92rem; color: var(--muted); margin: 0 0 12px; }
+
+    .canvas-wrap {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f1f5f9;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+    }
+    canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      touch-action: none;
+      cursor: crosshair;
+      border-radius: 6px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .camera-panel { margin-top: 14px; }
+    .camera-panel video {
+      width: 100%;
+      max-height: 60vh;
+      border-radius: 14px;
+      background: #000;
+      display: block;
+    }
+
+    .status {
+      margin: 12px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .status.error { color: var(--danger); }
+
+    [hidden] { display: none !important; }
+
+    .heic-help {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f8fafc;
+      color: var(--muted);
+    }
+    .heic-help summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .heic-help p, .heic-help li { color: var(--muted); line-height: 1.65; }
+    .heic-help code {
+      background: #e2e8f0;
+      color: var(--text);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="lang-switch" aria-label="Język">
+        <a href="/" hreflang="en" lang="en"><span aria-hidden="true">🇬🇧</span> English</a>
+        <a href="/nl/" hreflang="nl" lang="nl"><span aria-hidden="true">🇳🇱</span> Nederlands</a>
+        <a href="/es/" hreflang="es" lang="es"><span aria-hidden="true">🇪🇸</span> Español</a>
+        <a href="/pl/" hreflang="pl" lang="pl" aria-current="page"><span aria-hidden="true">🇵🇱</span> Polski</a>
+      </nav>
+      <h1>Bezpieczna kopia dowodu osobistego lub paszportu</h1>
+      <p class="hero-copy">
+        Wgraj lub sfotografuj swój dowód osobisty albo paszport, zasłoń dane, których nie chcesz udostępniać,
+        i dodaj ukośny znak wodny z celem i datą — wszystko dzieje się w Twojej przeglądarce.
+      </p>
+      <a class="back" href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">⟨/⟩ Zobacz kod źródłowy na GitHubie — otwarty kod, nic ukrytego</a>
+    </header>
+
+    <main>
+      <section class="card tool">
+        <h2>1. Dodaj dowód osobisty lub paszport</h2>
+        <p class="hint">Wybierz plik z urządzenia albo zrób zdjęcie aparatem. W obu przypadkach obraz pozostaje w tej przeglądarce.</p>
+
+        <label class="file-drop" id="drop">
+          <input type="file" id="file" accept="image/*,.heic,.heif,image/heic,image/heif" />
+          <span id="drop-label">Upuść obraz tutaj lub kliknij, aby wybrać plik (JPEG lub PNG)</span>
+        </label>
+
+        <details id="heic-help" class="heic-help">
+          <summary>Masz zdjęcie <code>.HEIC</code> z iPhone'a? Jak je najpierw przekonwertować</summary>
+          <p>
+            HEIC to domyślny format zdjęć Apple. To narzędzie celowo nie zawiera dekodera HEIC, bo każdy
+            zewnętrzny dekoder ładowany w trakcie działania byłby ryzykiem w łańcuchu dostaw dla strony, która
+            obsługuje Twój dokument tożsamości. Oto jak przekonwertować HEIC do JPEG lokalnie:
+          </p>
+          <ul>
+            <li>
+              <strong>iPhone / iPad</strong> — najprościej: Ustawienia → Aparat → Formaty → wybierz
+              <em>Najbardziej zgodne</em> i zrób zdjęcie ponownie; nowe zdjęcia będą w formacie JPEG. Dla
+              istniejącego pliku HEIC otwórz zdjęcie w aplikacji Pliki, przytrzymaj je, wybierz Udostępnij →
+              <em>Zachowaj w Plikach</em> z opcją „JPEG” albo użyj wbudowanej czynności <em>Konwertuj obraz</em>
+              w aplikacji Skróty.
+            </li>
+            <li>
+              <strong>macOS</strong> — kliknij dwukrotnie plik HEIC, aby otworzyć go w Podglądzie, a następnie
+              Plik → Eksportuj… → ustaw Format na JPEG.
+            </li>
+            <li>
+              <strong>Windows 10/11</strong> — zainstaluj bezpłatne „Rozszerzenia obrazów HEIF” Microsoftu ze
+              Sklepu Microsoft, otwórz plik w aplikacji Zdjęcia i wybierz „Zapisz jako” → JPEG.
+            </li>
+            <li>
+              <strong>Android</strong> — większość telefonów z Androidem zapisuje zdjęcia jako JPEG. Jeśli
+              otrzymałeś plik HEIC, otwórz go w Zdjęciach Google → menu → „Zapisz jako” / „Eksportuj”.
+            </li>
+          </ul>
+          <p style="margin-bottom: 0;">
+            <strong>Unikaj konwerterów HEIC online</strong> — wysyłanie dowodu do przypadkowego serwisu
+            konwertującego przekreśla cały sens tego narzędzia.
+          </p>
+        </details>
+
+        <div class="upload-row">
+          <button type="button" id="start-camera">📷 Zrób zdjęcie aparatem</button>
+          <button type="button" id="pick-file">🖼️ Wybierz istniejący obraz</button>
+        </div>
+
+        <div class="camera-panel" id="camera-panel" hidden>
+          <video id="video" playsinline muted></video>
+          <div class="actions">
+            <button type="button" id="shutter" class="primary">Zrób zdjęcie</button>
+            <button type="button" id="flip-camera">Przełącz aparat</button>
+            <button type="button" id="cancel-camera">Anuluj</button>
+          </div>
+          <p class="status" id="camera-status"></p>
+        </div>
+
+        <h2>2. Uzupełnij znak wodny</h2>
+        <div class="form-grid">
+          <label>
+            Cel przekazania kopii (wymagane — ten tekst pojawi się w znaku wodnym)
+            <input type="text" id="purpose" placeholder="np. umowa najmu z Nieruchomości Sp. z o.o." maxlength="140" autocomplete="off" required value="zameldowanie w domku letniskowym" />
+          </label>
+          <label>
+            Data
+            <input type="date" id="date" />
+          </label>
+        </div>
+
+        <div id="editor" hidden>
+          <h2>3. Zasłoń to, czego nie chcesz udostępniać</h2>
+          <p class="hint">
+            Przeciągnij po obrazie, aby narysować czarny prostokąt na każdym polu, którego wolisz nie udostępniać.
+            Na polskim dowodzie osobistym zwykle warto zasłonić <strong>serię i numer dowodu</strong>,
+            <strong>numer CAN</strong>, <strong>podpis</strong>, <strong>PESEL</strong> (jeśli odbiorca go nie
+            potrzebuje) oraz <strong>strefę MRZ</strong> (trzy wiersze tekstu z &lt;&lt;&lt; na odwrocie).
+          </p>
+          <div class="canvas-wrap">
+            <canvas id="canvas"></canvas>
+          </div>
+          <div class="actions">
+            <button type="button" id="undo">Cofnij ostatnie zasłonięcie</button>
+            <button type="button" id="clear-blackouts" class="danger">Usuń wszystkie zasłonięcia</button>
+            <button type="button" id="download" class="primary">⬇ Pobierz kopię ze znakiem wodnym (JPEG)</button>
+          </div>
+          <p class="hint" style="margin-top: 12px;">
+            Wskazówka: znak wodny aktualizuje się na bieżąco podczas pisania. Opisz cel konkretnie (dla kogo i po
+            co), aby było jasne, że kopia jest jednorazowa.
+          </p>
+        </div>
+      </section>
+
+      <section class="card privacy-card">
+        <h2>🔒 Twój obraz nigdy nie opuszcza tej karty przeglądarki</h2>
+        <ul>
+          <li>Bez serwerów do wysyłania. Bez wywołań API. Bez analityki. Bez śledzenia.</li>
+          <li>Wszystko działa w czystym JavaScripcie na Twoim urządzeniu.</li>
+          <li>Nic nie jest zapisywane — ani w ciasteczkach, ani w localStorage, ani nigdzie indziej.</li>
+          <li>Odśwież stronę i wszystko znika. Zamknij kartę i wszystko znika.</li>
+          <li>Możesz nawet zapisać tę stronę (Ctrl+S / ⌘+S) i używać jej całkowicie offline.</li>
+          <li>
+            Ta strona celowo nie ładuje <em>żadnych</em> zewnętrznych skryptów — nawet do dekodowania HEIC —
+            więc nie ma CDN, którego przejęcie pozwoliłoby zaatakować Twoją kopię strony.
+          </li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          To ważne, bo zdjęcie dokumentu tożsamości to dane wrażliwe: zawiera imię i nazwisko, datę urodzenia,
+          numer dokumentu, podpis, zdjęcie, a na polskim dowodzie także numer PESEL. Rozsyłanie go bez
+          zabezpieczenia to ulubiony składnik kradzieży tożsamości.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Co zaleca UODO w Polsce</h2>
+        <p>
+          <a href="https://uodo.gov.pl/pl/138/2476" target="_blank" rel="noopener">Urząd Ochrony Danych Osobowych (UODO)</a>
+          podkreśla, że kopiowanie dowodu osobistego powinno być wyjątkiem. W skrócie:
+        </p>
+        <ul>
+          <li>Preferowaną praktyką jest <strong>okazanie dokumentu osobiście</strong> zamiast przekazywania kopii.</li>
+          <li>Jeśli kopia jest naprawdę nieunikniona, <strong>zasłoń każde pole</strong>, którego cel umowy ściśle nie wymaga.</li>
+          <li>Oznacz kopię <strong>celem</strong> i <strong>datą</strong>, aby nie dało się jej łatwo wykorzystać ponownie.</li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          Dodatkowa ochrona: od listopada 2023 r. możesz <strong>zastrzec swój numer PESEL</strong> (np. w aplikacji
+          mObywatel lub w urzędzie gminy). Banki i inne instytucje muszą wtedy sprawdzić zastrzeżenie, zanim
+          udzielą kredytu na Twoje dane.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Co zaleca rząd Holandii</h2>
+        <p>
+          To narzędzie powstało na podstawie oficjalnych zaleceń z Holandii, gdzie dwa źródła mówią to samo:
+          <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
+          (portal rządu centralnego) oraz
+          <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>
+          (holenderski organ ochrony danych). W skrócie:
+        </p>
+        <ul>
+          <li>Spraw, by numer <strong>BSN</strong> (holenderski odpowiednik numeru PESEL) był nieczytelny na kopii — <em>również</em> w strefie odczytu maszynowego na dole dokumentu.</li>
+          <li>Możesz też zasłonić <strong>zdjęcie</strong> i <strong>podpis</strong>.</li>
+          <li>Napisz na kopii, że to <strong>kopia</strong>, oraz dla kogo / do jakiego produktu lub celu jest przeznaczona.</li>
+          <li>Napisz na kopii <strong>datę</strong>, w której ją przekazujesz.</li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          Autoriteit Persoonsgegevens wyraźnie zaznacza, że niektóre organizacje — na przykład operatorzy
+          telekomunikacyjni i wypożyczalnie samochodów — w ogóle nie mogą przetwarzać numeru BSN ani zdjęcia i
+          same muszą je zasłonić, jeśli robią kopię.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Podobne zalecenia innych europejskich organów</h2>
+        <p>
+          Inne organy ochrony danych w UE dają równoważne rady: zasłoń pola, których odbiorca ściśle nie
+          potrzebuje, i oznacz kopię celem i datą. To narzędzie sprawdzi się w każdym przypadku — wpisz po prostu
+          w polu celu sformułowanie zalecane przez dany organ.
+        </p>
+        <ul>
+          <li>
+            <strong>Francja — <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>.</strong>
+            Dodaj widoczny znak wodny z odbiorcą, celem i datą — przykład samej CNIL to
+            <em>„Document transmis uniquement pour l'ouverture d'un compte chez [organisme] – [date]”</em>.
+            CNIL zaleca też ograniczenie rozdzielczości kopii, aby trudniej było ją ponownie wykorzystać.
+          </li>
+          <li>
+            <strong>Niemcy — <a href="https://www.verbraucherzentrale-niedersachsen.de/themen/internet-telefon/datenschutz/ausweiskopien-wasserzeichen-so-schuetzen-sie-sich-vor-identitaetsdiebstahl" target="_blank" rel="noopener">Verbraucherzentrale Niedersachsen</a>.</strong>
+            Na Personalausweis zasłoń numer dokumentu, numer dostępu/seryjny, kolor oczu, wzrost,
+            obywatelstwo, podpis oraz miejsce i datę urodzenia, a następnie dodaj znak wodny z odbiorcą i celem.
+            Od zmiany ustawy PAuswG w 2017 r. do weryfikacji tożsamości zwykle wystarczą imię i nazwisko, adres,
+            data urodzenia i data ważności.
+          </li>
+          <li>
+            <strong>Hiszpania — <a href="https://www.aepd.es/preguntas-frecuentes/1-tus-derechos/3-identificacion-con-dni/FAQ-0116-que-puedo-hacer-si-me-solicitan-una-copia-del-dni" target="_blank" rel="noopener">AEPD</a>.</strong>
+            Na awersie DNI usuń lub rozmaż numer nośnika, płeć, obywatelstwo, datę urodzenia i podpis; na
+            rewersie adres, miejsce urodzenia i imiona rodziców. Wystarczą imię, nazwiska, numer dokumentu i
+            zdjęcie — plus widoczna adnotacja z celem i datą.
+          </li>
+          <li>
+            <strong>Belgia — <a href="https://www.gegevensbeschermingsautoriteit.be/burger/thema-s/elektronische-identiteitskaart-eid/praktische-toepassingen" target="_blank" rel="noopener">Urząd Ochrony Danych (APD/GBA)</a>.</strong>
+            Przekazuj tylko przekreśloną kopię, zasłaniając każde pole, które nie jest ściśle potrzebne —
+            zwłaszcza krajowy numer rejestrowy, numer karty eID, daty ważności, płeć, obywatelstwo oraz miejsce i
+            datę urodzenia — i napisz na kopii nazwę odbiorcy oraz konkretny dozwolony cel.
+          </li>
+        </ul>
+        <p style="margin-bottom: 0;">
+          Wspólny mianownik wszystkich tych zaleceń jest ten sam: udostępniaj minimum, dodaj znak wodny z celem
+          i datą, i zapisz, kto otrzymał kopię.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Zanim wyślesz kopię</h2>
+        <ul>
+          <li>Sprawdź pobrany obraz: czy dane są naprawdę zasłonięte? Czy znak wodny jest czytelny?</li>
+          <li>Najlepiej wyślij kopię kanałem szyfrowanym end-to-end. Jeśli możesz, unikaj zwykłego e-maila.</li>
+          <li>Zanotuj odbiorcę i datę. Jeśli kopia kiedyś wypłynie gdzie indziej, będziesz wiedzieć, kto ją miał.</li>
+          <li>Jeśli ktoś żąda pełnej, niezasłoniętej kopii dowodu bez wyraźnego powodu, zapytaj o cel i podstawę prawną. Często to sygnał ostrzegawczy.</li>
+        </ul>
+      </section>
+
+      <footer>
+        Mały eksperyment open source, oparty na zaleceniach
+        <a href="https://uodo.gov.pl/pl/138/2476" target="_blank" rel="noopener">UODO</a>,
+        <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/fraude-voorkomen-met-kopie-id-bewijs" target="_blank" rel="noopener">Rijksoverheid</a>
+        i
+        <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.
+        Nie zbieramy żadnych danych — nie musisz wierzyć nam na słowo:
+        <a href="https://github.com/rmeertens/passport-privacy" target="_blank" rel="noopener">przeczytaj kod źródłowy na GitHubie</a>.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const fileInput   = document.getElementById('file');
+      const dropEl      = document.getElementById('drop');
+      const dropLabel   = document.getElementById('drop-label');
+      const pickBtn     = document.getElementById('pick-file');
+      const startCamBtn = document.getElementById('start-camera');
+      const cameraPanel = document.getElementById('camera-panel');
+      const videoEl     = document.getElementById('video');
+      const shutterBtn  = document.getElementById('shutter');
+      const flipBtn     = document.getElementById('flip-camera');
+      const cancelCam   = document.getElementById('cancel-camera');
+      const camStatus   = document.getElementById('camera-status');
+      const purposeEl   = document.getElementById('purpose');
+      const dateEl      = document.getElementById('date');
+      const editor      = document.getElementById('editor');
+      const canvas      = document.getElementById('canvas');
+      const ctx         = canvas.getContext('2d');
+      const undoBtn     = document.getElementById('undo');
+      const clearBtn    = document.getElementById('clear-blackouts');
+      const dlBtn       = document.getElementById('download');
+
+      const today = new Date();
+      dateEl.value = today.toISOString().slice(0, 10);
+
+      let image = null;
+      let blackouts = [];
+      let drawing = null;
+      let currentStream = null;
+      let currentFacing = 'environment';
+
+      // --- File + drop handling ---
+      pickBtn.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', e => {
+        const f = e.target.files && e.target.files[0];
+        if (f) loadFile(f);
+      });
+      dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('over'); });
+      dropEl.addEventListener('dragleave', () => dropEl.classList.remove('over'));
+      dropEl.addEventListener('drop', e => {
+        e.preventDefault();
+        dropEl.classList.remove('over');
+        const f = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) loadFile(f);
+      });
+
+      function isHeicFile(file) {
+        const type = (file.type || '').toLowerCase();
+        if (type === 'image/heic' || type === 'image/heif' ||
+            type === 'image/heic-sequence' || type === 'image/heif-sequence') return true;
+        const name = (file.name || '').toLowerCase();
+        return name.endsWith('.heic') || name.endsWith('.heif');
+      }
+
+      function loadFile(file) {
+        if (isHeicFile(file)) {
+          dropLabel.textContent =
+            'Plików HEIC nie da się bezpiecznie otworzyć w przeglądarce bez zewnętrznej biblioteki. ' +
+            'Najpierw przekonwertuj zdjęcie do JPEG lub PNG — instrukcja poniżej.';
+          const help = document.getElementById('heic-help');
+          if (help) help.open = true;
+          return;
+        }
+        if (!file.type || !file.type.startsWith('image/')) {
+          dropLabel.textContent = 'Ten plik nie jest obrazem. Spróbuj ponownie.';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => loadDataUrl(reader.result, file.name);
+        reader.readAsDataURL(file);
+      }
+
+      function loadDataUrl(url, name) {
+        const img = new Image();
+        img.onload = () => {
+          image = img;
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          blackouts = [];
+          editor.hidden = false;
+          dropLabel.textContent = (name ? name + ' — ' : '') + 'wczytano lokalnie. Upuść nowy obraz, aby go zastąpić.';
+          render();
+          editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        img.onerror = () => {
+          dropLabel.textContent = 'Nie udało się odczytać obrazu. Spróbuj innego pliku.';
+        };
+        img.src = url;
+      }
+
+      // --- Camera handling (getUserMedia, fully local) ---
+      startCamBtn.addEventListener('click', () => startCamera(currentFacing));
+      cancelCam.addEventListener('click', stopCamera);
+      flipBtn.addEventListener('click', () => {
+        currentFacing = currentFacing === 'environment' ? 'user' : 'environment';
+        startCamera(currentFacing);
+      });
+      shutterBtn.addEventListener('click', capturePhoto);
+
+      async function startCamera(facing) {
+        stopCamera();
+        camStatus.textContent = '';
+        camStatus.classList.remove('error');
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          camStatus.textContent = 'Ta przeglądarka nie obsługuje dostępu do aparatu. Użyj opcji "Wybierz istniejący obraz".';
+          camStatus.classList.add('error');
+          return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: facing }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+            audio: false
+          });
+          currentStream = stream;
+          videoEl.srcObject = stream;
+          await videoEl.play();
+          cameraPanel.hidden = false;
+          cameraPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (err) {
+          cameraPanel.hidden = false;
+          camStatus.textContent = 'Brak dostępu do aparatu lub aparat niedostępny: ' + err.message;
+          camStatus.classList.add('error');
+        }
+      }
+
+      function stopCamera() {
+        if (currentStream) {
+          currentStream.getTracks().forEach(t => t.stop());
+          currentStream = null;
+        }
+        videoEl.srcObject = null;
+        cameraPanel.hidden = true;
+      }
+
+      function capturePhoto() {
+        if (!videoEl.videoWidth) return;
+        const tmp = document.createElement('canvas');
+        tmp.width = videoEl.videoWidth;
+        tmp.height = videoEl.videoHeight;
+        tmp.getContext('2d').drawImage(videoEl, 0, 0);
+        const url = tmp.toDataURL('image/png');
+        stopCamera();
+        loadDataUrl(url, 'camera-capture.png');
+      }
+
+      // --- Live re-render on text inputs ---
+      purposeEl.addEventListener('input', render);
+      dateEl.addEventListener('input', render);
+
+      // --- Blackout drawing (mouse + touch) ---
+      function canvasPoint(e) {
+        const rect = canvas.getBoundingClientRect();
+        const sx = canvas.width / rect.width;
+        const sy = canvas.height / rect.height;
+        const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+        return {
+          x: (t.clientX - rect.left) * sx,
+          y: (t.clientY - rect.top) * sy
+        };
+      }
+      function onDown(e) {
+        if (!image) return;
+        e.preventDefault();
+        const p = canvasPoint(e);
+        drawing = { x: p.x, y: p.y, w: 0, h: 0 };
+      }
+      function onMove(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const p = canvasPoint(e);
+        drawing.w = p.x - drawing.x;
+        drawing.h = p.y - drawing.y;
+        render();
+      }
+      function onUp(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const r = drawing;
+        if (r.w < 0) { r.x += r.w; r.w = -r.w; }
+        if (r.h < 0) { r.y += r.h; r.h = -r.h; }
+        if (r.w > 4 && r.h > 4) blackouts.push(r);
+        drawing = null;
+        render();
+      }
+      canvas.addEventListener('mousedown', onDown);
+      canvas.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+      canvas.addEventListener('touchstart', onDown, { passive: false });
+      canvas.addEventListener('touchmove', onMove, { passive: false });
+      canvas.addEventListener('touchend', onUp, { passive: false });
+      canvas.addEventListener('touchcancel', onUp, { passive: false });
+
+      undoBtn.addEventListener('click', () => { blackouts.pop(); render(); });
+      clearBtn.addEventListener('click', () => { blackouts = []; render(); });
+
+      // --- Download ---
+      dlBtn.addEventListener('click', () => {
+        if (!image) return;
+        // Flatten onto a white background so the JPEG (no alpha) looks right.
+        const flat = document.createElement('canvas');
+        flat.width = canvas.width;
+        flat.height = canvas.height;
+        const fctx = flat.getContext('2d');
+        fctx.fillStyle = '#ffffff';
+        fctx.fillRect(0, 0, flat.width, flat.height);
+        fctx.drawImage(canvas, 0, 0);
+        flat.toBlob(blob => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'id-copy-watermarked.jpg';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
+        }, 'image/jpeg', 0.85);
+      });
+
+      // --- Rendering ---
+      function render() {
+        if (!image) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+
+        ctx.fillStyle = '#000';
+        for (const r of blackouts) ctx.fillRect(r.x, r.y, r.w, r.h);
+
+        if (drawing) {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+          ctx.fillRect(drawing.x, drawing.y, drawing.w, drawing.h);
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = Math.max(1, Math.min(canvas.width, canvas.height) / 400);
+          ctx.strokeRect(drawing.x, drawing.y, drawing.w, drawing.h);
+        }
+
+        drawWatermark();
+      }
+
+      function drawWatermark() {
+        const purpose = (purposeEl.value || '').trim() || '(nie podano celu)';
+        const dateStr = formatDate(dateEl.value);
+        const text = 'KOPIA  •  ' + purpose + '  •  ' + dateStr;
+
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.save();
+        ctx.globalAlpha = 0.28;
+        ctx.fillStyle = '#ffffff';
+        const fontSize = Math.max(22, Math.min(w, h) / 18);
+        ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.translate(w / 2, h / 2);
+        ctx.rotate(-Math.PI / 6); // -30°
+        const diagonal = Math.sqrt(w * w + h * h);
+        const spacing = fontSize * 3;
+        const lines = Math.ceil(diagonal / spacing);
+        for (let i = -lines; i <= lines; i++) {
+          ctx.fillText(text, 0, i * spacing);
+        }
+        ctx.restore();
+
+        drawUrlWatermark();
+      }
+
+      function drawUrlWatermark() {
+        const urlText = 'passport-privacy.meertens.dev';
+        const w = canvas.width;
+        const h = canvas.height;
+        const fontSize = Math.max(12, Math.min(w, h) / 55);
+        ctx.save();
+        ctx.font = '600 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        const pad = fontSize * 0.6;
+        const textW = ctx.measureText(urlText).width;
+        const boxH = fontSize * 1.6;
+        const boxW = textW + pad * 2;
+        const boxX = pad;
+        const boxY = h - pad - boxH;
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(boxX, boxY, boxW, boxH);
+        ctx.globalAlpha = 0.95;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(urlText, boxX + pad, boxY + boxH - pad * 0.7);
+        ctx.restore();
+      }
+
+      function formatDate(iso) {
+        if (!iso) return '(nie podano daty)';
+        const parts = iso.split('-');
+        if (parts.length !== 3) return iso;
+        return parts[2] + '-' + parts[1] + '-' + parts[0]; // DD-MM-YYYY, Dutch style
+      }
+
+      // Reset file input so choosing the same file twice still fires 'change'
+      fileInput.addEventListener('click', () => { fileInput.value = ''; });
+    })();
+  </script>
+</body>
+</html>
