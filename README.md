@@ -2,7 +2,7 @@
 
 A tiny, single-page browser tool for safely sharing a copy of your passport or ID card.
 
-Live at **[passport-privacy.meertens.dev](https://passport-privacy.meertens.dev/)** in English, Dutch (`/nl/`), Spanish (`/es/`), and Polish (`/pl/`).
+Live at **[passport-privacy.meertens.dev](https://passport-privacy.meertens.dev/)** in English, German (`/de/`), French (`/fr/`), Dutch (`/nl/`), Spanish (`/es/`), and Polish (`/pl/`).
 
 ## What it does
 
@@ -41,6 +41,8 @@ Plain HTML + CSS + a single inline `<script>`. No build step, no dependencies, n
 
 ```
 index.html      English version (served at /)
+de/index.html   German version  (served at /de/)
+fr/index.html   French version  (served at /fr/)
 nl/index.html   Dutch version   (served at /nl/)
 es/index.html   Spanish version (served at /es/)
 pl/index.html   Polish version  (served at /pl/)
