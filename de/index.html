@@ -256,6 +256,15 @@
 
     .hint { font-size: 0.92rem; color: var(--muted); margin: 0 0 12px; }
 
+    label.check {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+    label.check input { margin-top: 4px; }
+
     .canvas-wrap {
       width: 100%;
       overflow: auto;
@@ -438,6 +447,10 @@
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
           </div>
+          <label class="check">
+            <input type="checkbox" id="limit-res" checked />
+            <span>Auflösung verringern (max. 1200 Pixel) — weiterhin lesbar, aber schwerer weiterzuverwenden oder zu fälschen</span>
+          </label>
           <div class="actions">
             <button type="button" id="undo">Letzte Schwärzung rückgängig</button>
             <button type="button" id="clear-blackouts" class="danger">Alle Schwärzungen entfernen</button>
@@ -518,6 +531,8 @@
             schwärzen. Auf der Kopie notieren, dass es eine Kopie ist, für wen und wofür sie bestimmt ist,
             sowie das Datum. Bei Dokumenten ab dem 2. August 2021 steckt der BSN in einem QR-Code (Rückseite der ID-Karte,
             Datenseite des Reisepasses) — diesen QR-Code ebenfalls schwärzen.
+            Die niederländische Regierung bietet dafür auch eine eigene kostenlose App an: <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/veilige-kopie-identiteitsbewijs" target="_blank" rel="noopener">KopieID</a>
+            (iPhone und Android).
           </li>
           <li>
             <strong>Frankreich — <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>.</strong>
@@ -633,6 +648,9 @@
       const undoBtn     = document.getElementById('undo');
       const clearBtn    = document.getElementById('clear-blackouts');
       const dlBtn       = document.getElementById('download');
+      const limitResEl  = document.getElementById('limit-res');
+
+      const MAX_EXPORT_SIDE = 1200;
 
       const today = new Date();
       dateEl.value = today.toISOString().slice(0, 10);
@@ -811,13 +829,18 @@
       dlBtn.addEventListener('click', () => {
         if (!image) return;
         // Flatten onto a white background so the JPEG (no alpha) looks right.
+        // Optionally cap the long side: a smaller copy stays readable but is harder to reuse.
+        const scale = limitResEl.checked
+          ? Math.min(1, MAX_EXPORT_SIDE / Math.max(canvas.width, canvas.height))
+          : 1;
         const flat = document.createElement('canvas');
-        flat.width = canvas.width;
-        flat.height = canvas.height;
+        flat.width = Math.round(canvas.width * scale);
+        flat.height = Math.round(canvas.height * scale);
         const fctx = flat.getContext('2d');
         fctx.fillStyle = '#ffffff';
         fctx.fillRect(0, 0, flat.width, flat.height);
-        fctx.drawImage(canvas, 0, 0);
+        fctx.imageSmoothingQuality = 'high';
+        fctx.drawImage(canvas, 0, 0, flat.width, flat.height);
         flat.toBlob(blob => {
           if (!blob) return;
           const url = URL.createObjectURL(blob);

@@ -35,7 +35,7 @@ This project is not affiliated with any of the above bodies.
 
 ## Tech
 
-Plain HTML + CSS + a single inline `<script>`. No build step, no dependencies, no bundler. Deployed via GitHub Pages from `main`.
+Plain HTML + CSS + a single inline `<script>`. No dependencies, no bundler, and nothing to build at deploy time: GitHub Pages serves the committed files from `main`.
 
 ## Repository layout
 
@@ -46,10 +46,22 @@ fr/index.html   French version  (served at /fr/)
 nl/index.html   Dutch version   (served at /nl/)
 es/index.html   Spanish version (served at /es/)
 pl/index.html   Polish version  (served at /pl/)
+i18n/build.py   Generates the translated pages from index.html
+i18n/<code>.py  One file per translation (metadata, body text, script strings)
 sitemap.xml     Lists all language variants with hreflang alternates
 robots.txt      Points crawlers at the sitemap
 CNAME           Custom domain for GitHub Pages
 ```
+
+## Translations
+
+`index.html` is the single source for the markup, styles and script. The translated pages are generated from it, so a change to how the tool works only has to be made once:
+
+- **Changing the tool or the layout:** edit `index.html`, then run `python3 i18n/build.py` and commit the regenerated pages alongside it.
+- **Changing translated text:** edit `i18n/<code>.py` (the page metadata, the body from `<h1>` to `</main>`, and the strings in the script), then run the build.
+- **Changing English body text:** edit `index.html` and make the matching edit in each `i18n/<code>.py` — the body text is translated by hand, not copied.
+
+`python3 i18n/build.py --check` exits non-zero if any generated page is out of date. The script needs only Python 3, no packages. Adding a language is described at the top of `i18n/build.py`.
 
 ## Contributing
 

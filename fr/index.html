@@ -256,6 +256,15 @@
 
     .hint { font-size: 0.92rem; color: var(--muted); margin: 0 0 12px; }
 
+    label.check {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+    label.check input { margin-top: 4px; }
+
     .canvas-wrap {
       width: 100%;
       overflow: auto;
@@ -435,6 +444,10 @@
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
           </div>
+          <label class="check">
+            <input type="checkbox" id="limit-res" checked />
+            <span>Réduire la résolution (1200 pixels max.) — toujours lisible, mais plus difficile à réutiliser ou à falsifier</span>
+          </label>
           <div class="actions">
             <button type="button" id="undo">Annuler le dernier masquage</button>
             <button type="button" id="clear-blackouts" class="danger">Effacer tous les masquages</button>
@@ -503,6 +516,8 @@
             sur la copie qu'il s'agit d'une copie, la finalité et la date. Sur les documents émis à
             partir du 2 août 2021, le BSN figure dans un code QR (au verso de la carte d'identité, sur la page de
             données du passeport) : masquez aussi ce code QR.
+            Le gouvernement néerlandais propose aussi sa propre application gratuite pour cela : <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/veilige-kopie-identiteitsbewijs" target="_blank" rel="noopener">KopieID</a>
+            (iPhone et Android).
           </li>
           <li>
             <strong>Allemagne — <a href="https://www.verbraucherzentrale-niedersachsen.de/themen/internet-telefon/datenschutz/ausweiskopien-wasserzeichen-so-schuetzen-sie-sich-vor-identitaetsdiebstahl" target="_blank" rel="noopener">Verbraucherzentrale Niedersachsen</a>.</strong>
@@ -620,6 +635,9 @@
       const undoBtn     = document.getElementById('undo');
       const clearBtn    = document.getElementById('clear-blackouts');
       const dlBtn       = document.getElementById('download');
+      const limitResEl  = document.getElementById('limit-res');
+
+      const MAX_EXPORT_SIDE = 1200;
 
       const today = new Date();
       dateEl.value = today.toISOString().slice(0, 10);
@@ -798,13 +816,18 @@
       dlBtn.addEventListener('click', () => {
         if (!image) return;
         // Flatten onto a white background so the JPEG (no alpha) looks right.
+        // Optionally cap the long side: a smaller copy stays readable but is harder to reuse.
+        const scale = limitResEl.checked
+          ? Math.min(1, MAX_EXPORT_SIDE / Math.max(canvas.width, canvas.height))
+          : 1;
         const flat = document.createElement('canvas');
-        flat.width = canvas.width;
-        flat.height = canvas.height;
+        flat.width = Math.round(canvas.width * scale);
+        flat.height = Math.round(canvas.height * scale);
         const fctx = flat.getContext('2d');
         fctx.fillStyle = '#ffffff';
         fctx.fillRect(0, 0, flat.width, flat.height);
-        fctx.drawImage(canvas, 0, 0);
+        fctx.imageSmoothingQuality = 'high';
+        fctx.drawImage(canvas, 0, 0, flat.width, flat.height);
         flat.toBlob(blob => {
           if (!blob) return;
           const url = URL.createObjectURL(blob);

@@ -256,6 +256,15 @@
 
     .hint { font-size: 0.92rem; color: var(--muted); margin: 0 0 12px; }
 
+    label.check {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+    label.check input { margin-top: 4px; }
+
     .canvas-wrap {
       width: 100%;
       overflow: auto;
@@ -433,6 +442,10 @@
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
           </div>
+          <label class="check">
+            <input type="checkbox" id="limit-res" checked />
+            <span>Verlaag de resolutie (max. 1200 pixels) — nog steeds leesbaar, maar lastiger te hergebruiken of te vervalsen</span>
+          </label>
           <div class="actions">
             <button type="button" id="undo">Laatste vlak ongedaan maken</button>
             <button type="button" id="clear-blackouts" class="danger">Alle vlakken wissen</button>
@@ -487,12 +500,17 @@
           telecomaanbieders en autoverhuurbedrijven — je BSN en pasfoto niet eens mogen verwerken, en die zelf
           moeten afschermen als ze een kopie maken.
         </p>
-        <p style="margin-bottom: 0;">
+        <p>
           Let op de QR-code: op Nederlandse paspoorten en ID-kaarten die vanaf <strong>2 augustus 2021</strong> zijn
           uitgegeven, is het BSN uit de machineleesbare regels gehaald en verplaatst naar een <strong>QR-code</strong>
           — op de achterkant van de ID-kaart en op de fotopagina van het paspoort. Scherm die QR-code dus ook af.
           Op oudere documenten kan het BSN ook als getal op de voor- of achterkant staan: scherm elke plek af
           waar het staat.
+        </p>
+        <p style="margin-bottom: 0;">
+          Liever een app? De Rijksoverheid heeft hiervoor een eigen gratis app, <a href="https://www.rijksoverheid.nl/onderwerpen/identiteitsfraude/vraag-en-antwoord/veilige-kopie-identiteitsbewijs" target="_blank" rel="noopener">KopieID</a>
+          (iPhone en Android): je schermt de gegevens af die de ontvanger niet nodig heeft en zet er een
+          watermerk met het doel op.
         </p>
       </section>
 
@@ -624,6 +642,9 @@
       const undoBtn     = document.getElementById('undo');
       const clearBtn    = document.getElementById('clear-blackouts');
       const dlBtn       = document.getElementById('download');
+      const limitResEl  = document.getElementById('limit-res');
+
+      const MAX_EXPORT_SIDE = 1200;
 
       const today = new Date();
       dateEl.value = today.toISOString().slice(0, 10);
@@ -802,13 +823,18 @@
       dlBtn.addEventListener('click', () => {
         if (!image) return;
         // Flatten onto a white background so the JPEG (no alpha) looks right.
+        // Optionally cap the long side: a smaller copy stays readable but is harder to reuse.
+        const scale = limitResEl.checked
+          ? Math.min(1, MAX_EXPORT_SIDE / Math.max(canvas.width, canvas.height))
+          : 1;
         const flat = document.createElement('canvas');
-        flat.width = canvas.width;
-        flat.height = canvas.height;
+        flat.width = Math.round(canvas.width * scale);
+        flat.height = Math.round(canvas.height * scale);
         const fctx = flat.getContext('2d');
         fctx.fillStyle = '#ffffff';
         fctx.fillRect(0, 0, flat.width, flat.height);
-        fctx.drawImage(canvas, 0, 0);
+        fctx.imageSmoothingQuality = 'high';
+        fctx.drawImage(canvas, 0, 0, flat.width, flat.height);
         flat.toBlob(blob => {
           if (!blob) return;
           const url = URL.createObjectURL(blob);
