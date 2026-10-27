@@ -354,6 +354,7 @@
     <main>
       <section class="card tool">
         <h2>1. Ajoutez votre passeport ou pièce d'identité</h2>
+        <noscript><p class="status error">Cet outil a besoin de JavaScript, qui est désactivé dans votre navigateur. Il fonctionne entièrement sur votre appareil : rien n'est envoyé.</p></noscript>
         <p class="hint">Choisissez un fichier sur votre appareil ou prenez une photo avec votre caméra. Dans les deux cas, l'image reste entièrement dans ce navigateur.</p>
 
         <label class="file-drop" id="drop">
@@ -413,11 +414,11 @@
         <h2>2. Renseignez le filigrane</h2>
         <div class="form-grid">
           <label>
-            Finalité de l'envoi (obligatoire — ce texte apparaît dans le filigrane)
+            Pour qui et pour quoi ? (obligatoire — ce texte apparaît dans le filigrane)
             <input type="text" id="purpose" placeholder="ex. ouverture d'un compte chez Exemple SA" maxlength="140" autocomplete="off" required value="check-in location de vacances" />
           </label>
           <label>
-            Date
+            Date de transmission
             <input type="date" id="date" />
           </label>
         </div>
@@ -428,7 +429,8 @@
             Faites glisser la souris sur l'image pour tracer un rectangle noir sur un champ que vous ne
             voulez pas transmettre. Sur une carte nationale d'identité française, on masque généralement
             le <strong>numéro de document</strong>, la <strong>signature</strong>, et la <strong>MRZ</strong>
-            (les deux lignes de &lt;&lt;&lt; en bas). Sur un passeport, on cache en plus le numéro et la MRZ.
+            (les lignes de &lt;&lt;&lt;). Masquez aussi tout <strong>code QR ou code 2D</strong> : il peut
+            contenir les mêmes données sous forme lisible par machine.
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -453,6 +455,7 @@
           <li>Rien n'est enregistré — ni dans les cookies, ni dans le localStorage, nulle part.</li>
           <li>Rafraîchissez la page, tout est effacé. Fermez l'onglet, tout est effacé.</li>
           <li>Vous pouvez même enregistrer la page (Ctrl+S / ⌘+S) et l'utiliser totalement hors ligne.</li>
+          <li>Le JPEG téléchargé est une image entièrement redessinée : les métadonnées cachées de la photo, comme la position GPS ou les infos de l'appareil, ne sont pas conservées.</li>
           <li>
             Cette page ne charge <em>aucun</em> script tiers à l'exécution — pas même pour décoder le
             HEIC — il n'y a donc aucun CDN qui pourrait être compromis pour attaquer votre copie de la page.
@@ -497,8 +500,9 @@
           <li>
             <strong>Pays-Bas — <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.</strong>
             Masquer le BSN (numéro national), la photo et la signature, y compris dans la MRZ. Indiquer
-            sur la copie qu'il s'agit d'une copie, la finalité et la date. Pour les documents émis à
-            partir du 2 août 2021, le BSN n'est plus imprimé au recto.
+            sur la copie qu'il s'agit d'une copie, la finalité et la date. Sur les documents émis à
+            partir du 2 août 2021, le BSN figure dans un code QR (au verso de la carte d'identité, sur la page de
+            données du passeport) : masquez aussi ce code QR.
           </li>
           <li>
             <strong>Allemagne — <a href="https://www.verbraucherzentrale-niedersachsen.de/themen/internet-telefon/datenschutz/ausweiskopien-wasserzeichen-so-schuetzen-sie-sich-vor-identitaetsdiebstahl" target="_blank" rel="noopener">Verbraucherzentrale Niedersachsen</a>.</strong>
@@ -573,10 +577,12 @@
       <section class="card">
         <h2>Avant d'envoyer votre copie</h2>
         <ul>
-          <li>Revérifiez l'image téléchargée : le numéro de document est-il bien couvert ? Le filigrane est-il lisible ?</li>
+          <li>Ouvrez l'image téléchargée et zoomez : tout ce que vous vouliez cacher est-il entièrement couvert, y compris les codes QR ou 2D ? Le filigrane est-il lisible ?</li>
           <li>Privilégiez un canal chiffré de bout en bout. Évitez l'e-mail classique si possible.</li>
           <li>Notez le destinataire et la date. Si la copie réapparaît ailleurs, vous saurez qui l'avait reçue.</li>
-          <li>En France, un commerçant, un hôtel ou un bailleur ne peut pas exiger une copie non filigranée de votre pièce d'identité : une demande de copie « brute » doit généralement vous alerter.</li>
+          <li>En France, un commerçant, un hôtel ou un bailleur n'a en général aucune raison d'exiger une copie non filigranée de votre pièce d'identité : une demande de copie « brute » doit vous alerter.</li>
+          <li>Certains organismes sont légalement tenus de voir certaines informations — par exemple, les banques doivent vérifier votre identité au titre de la lutte contre le blanchiment. En cas de doute, demandez au destinataire quels champs lui sont réellement nécessaires.</li>
+          <li>Après l'envoi, supprimez la copie de votre dossier Téléchargements et ne la laissez pas traîner dans des conversations ou des brouillons d'e-mail.</li>
         </ul>
       </section>
 
@@ -840,10 +846,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -852,6 +862,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();

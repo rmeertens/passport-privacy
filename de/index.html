@@ -354,6 +354,7 @@
     <main>
       <section class="card tool">
         <h2>1. Ausweis oder Reisepass hinzufügen</h2>
+        <noscript><p class="status error">Dieses Tool benötigt JavaScript, das in Ihrem Browser deaktiviert ist. Es läuft vollständig auf Ihrem Gerät — nichts wird hochgeladen.</p></noscript>
         <p class="hint">Wählen Sie eine Datei von Ihrem Gerät aus oder machen Sie ein Foto mit Ihrer Kamera. Beides bleibt vollständig in diesem Browser.</p>
 
         <label class="file-drop" id="drop">
@@ -415,11 +416,11 @@
         <h2>2. Wasserzeichen ausfüllen</h2>
         <div class="form-grid">
           <label>
-            Zweck der Weitergabe (Pflichtfeld — dieser Text erscheint im Wasserzeichen)
+            Für wen und wofür? (Pflichtfeld — dieser Text erscheint im Wasserzeichen)
             <input type="text" id="purpose" placeholder="z. B. Mietvertrag mit Beispiel GmbH" maxlength="140" autocomplete="off" required value="Check-in Ferienwohnung" />
           </label>
           <label>
-            Datum
+            Datum der Weitergabe
             <input type="date" id="date" />
           </label>
         </div>
@@ -430,8 +431,9 @@
             Ziehen Sie mit der Maus über das Bild, um ein schwarzes Rechteck über Felder zu legen, die Sie
             nicht teilen möchten. Beim deutschen Personalausweis sollten Sie typischerweise die
             <strong>Ausweisnummer</strong>, die <strong>Zugangs-/Seriennummer</strong>, die
-            <strong>Unterschrift</strong> und die <strong>MRZ</strong> (die beiden Zeilen mit
-            &lt;&lt;&lt; unten) schwärzen.
+            <strong>Unterschrift</strong> und die <strong>MRZ</strong> (die Zeilen mit
+            &lt;&lt;&lt;) schwärzen. Decken Sie auch jeden <strong>QR-Code</strong> ab — er kann dieselben
+            Daten maschinenlesbar enthalten.
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -456,6 +458,7 @@
           <li>Nichts wird gespeichert — nicht in Cookies, nicht im localStorage, nirgendwo.</li>
           <li>Seite aktualisieren und es ist weg. Tab schließen und es ist weg.</li>
           <li>Sie können diese Seite sogar speichern (Strg+S / ⌘+S) und vollständig offline nutzen.</li>
+          <li>Das heruntergeladene JPEG wird neu erzeugt: versteckte Foto-Metadaten wie GPS-Standort oder Kameradaten werden nicht übernommen.</li>
           <li>
             Diese Seite lädt zur Laufzeit bewusst <em>keine</em> Drittanbieter-Skripte nach — nicht einmal
             für HEIC-Dekodierung — es gibt also kein CDN, das kompromittiert werden könnte, um Ihre Kopie
@@ -513,7 +516,8 @@
             <strong>Niederlande — <a href="https://www.autoriteitpersoonsgegevens.nl/nl/onderwerpen/identificatie/identiteitsbewijs" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.</strong>
             Den BSN (Bürgerservicenummer, einschließlich in der MRZ), das Lichtbild und die Unterschrift
             schwärzen. Auf der Kopie notieren, dass es eine Kopie ist, für wen und wofür sie bestimmt ist,
-            sowie das Datum. Für Ausweise ab dem 2. August 2021 steht der BSN nicht mehr auf der Vorderseite.
+            sowie das Datum. Bei Dokumenten ab dem 2. August 2021 steckt der BSN in einem QR-Code (Rückseite der ID-Karte,
+            Datenseite des Reisepasses) — diesen QR-Code ebenfalls schwärzen.
           </li>
           <li>
             <strong>Frankreich — <a href="https://www.cnil.fr/fr/cnil-direct/question/ma-banque-peut-elle-faire-une-copie-de-ma-piece-didentite" target="_blank" rel="noopener">CNIL</a>.</strong>
@@ -586,10 +590,12 @@
       <section class="card">
         <h2>Bevor Sie die Kopie verschicken</h2>
         <ul>
-          <li>Kontrollieren Sie das heruntergeladene Bild: Ist die Ausweisnummer wirklich überdeckt? Ist das Wasserzeichen lesbar?</li>
+          <li>Öffnen Sie das heruntergeladene Bild und zoomen Sie hinein: Ist alles, was verborgen sein soll, vollständig abgedeckt – auch QR-Codes? Ist das Wasserzeichen lesbar?</li>
           <li>Versenden Sie nach Möglichkeit über einen Ende-zu-Ende-verschlüsselten Kanal. Vermeiden Sie normale E-Mails.</li>
           <li>Notieren Sie Empfänger und Datum. Taucht die Kopie später irgendwo auf, wissen Sie, wer sie hatte.</li>
           <li>In Deutschland dürfen Sie nach der PAuswG-Reform von 2017 eine teilgeschwärzte Kopie weitergeben — Forderungen nach einer ungeschwärzten Kopie sind oft unnötig und ein Warnsignal.</li>
+          <li>Manche Stellen müssen bestimmte Angaben von Gesetzes wegen sehen — Banken etwa müssen Ihre Identität nach dem Geldwäschegesetz prüfen. Fragen Sie im Zweifel nach, welche Felder wirklich benötigt werden.</li>
+          <li>Löschen Sie die Kopie nach dem Versand aus Ihrem Download-Ordner und lassen Sie sie nicht in Chats oder E-Mail-Entwürfen liegen.</li>
         </ul>
       </section>
 
@@ -853,10 +859,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -865,6 +875,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();

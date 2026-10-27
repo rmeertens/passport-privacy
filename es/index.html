@@ -353,6 +353,7 @@
     <main>
       <section class="card tool">
         <h2>1. Añade tu DNI o pasaporte</h2>
+        <noscript><p class="status error">Esta herramienta necesita JavaScript, que está desactivado en tu navegador. Funciona por completo en tu dispositivo: no se sube nada.</p></noscript>
         <p class="hint">Elige un archivo de tu dispositivo o haz una foto con la cámara. En ambos casos la imagen no sale de este navegador.</p>
 
         <label class="file-drop" id="drop">
@@ -413,11 +414,11 @@
         <h2>2. Rellena la marca de agua</h2>
         <div class="form-grid">
           <label>
-            Finalidad del envío (obligatorio: este texto aparece en la marca de agua)
+            ¿Para quién y para qué? (obligatorio: este texto aparece en la marca de agua)
             <input type="text" id="purpose" placeholder="p. ej. contrato de alquiler con Inmobiliaria S.L." maxlength="140" autocomplete="off" required value="registro en alojamiento vacacional" />
           </label>
           <label>
-            Fecha
+            Fecha de envío
             <input type="date" id="date" />
           </label>
         </div>
@@ -429,7 +430,8 @@
             compartir. En un DNI español, la AEPD recomienda tachar el <strong>número de soporte</strong>, el
             <strong>sexo</strong>, la <strong>nacionalidad</strong>, la <strong>fecha de nacimiento</strong> y la
             <strong>firma</strong>, y en el reverso la <strong>dirección</strong>, el <strong>lugar de nacimiento</strong>
-            y los <strong>nombres de los padres</strong>.
+            y los <strong>nombres de los padres</strong>. Tapa también cualquier <strong>código QR</strong>: puede
+            contener los mismos datos en formato legible por máquina.
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -454,6 +456,7 @@
           <li>No se guarda nada: ni en cookies, ni en localStorage, ni en ningún sitio.</li>
           <li>Recarga la página y desaparece. Cierra la pestaña y desaparece.</li>
           <li>Incluso puedes guardar esta página (Ctrl+S / ⌘+S) y usarla totalmente sin conexión.</li>
+          <li>El JPEG descargado es una imagen generada de nuevo: los metadatos ocultos de la foto, como la ubicación GPS o los datos de la cámara, no se conservan.</li>
           <li>
             Esta página no carga a propósito <em>ningún</em> script de terceros en tiempo de ejecución, ni
             siquiera para decodificar HEIC, así que no hay ningún CDN que se pueda comprometer para atacar tu copia
@@ -496,6 +499,7 @@
         </p>
         <ul>
           <li>Haz ilegible el <strong>BSN</strong> (el número de identificación de los ciudadanos neerlandeses) en la copia, <em>también</em> en los dígitos legibles por máquina de la parte inferior del documento.</li>
+          <li>En los documentos emitidos desde el <strong>2 de agosto de 2021</strong>, el BSN está en un <strong>código QR</strong> (en el reverso del documento de identidad y en la página de datos del pasaporte): tápalo también.</li>
           <li>También puedes tachar la <strong>foto</strong> y la <strong>firma</strong>.</li>
           <li>Escribe en la copia que es una <strong>copia</strong>, y para quién o para qué producto o finalidad está destinada.</li>
           <li>Escribe en la copia la <strong>fecha</strong> en que la entregas.</li>
@@ -552,10 +556,12 @@
       <section class="card">
         <h2>Antes de enviar tu copia</h2>
         <ul>
-          <li>Revisa la imagen descargada: ¿están bien tapados los datos? ¿Se lee la marca de agua?</li>
+          <li>Abre la imagen descargada y amplíala: ¿está bien tapado todo lo que querías ocultar, incluido cualquier código QR? ¿Se lee la marca de agua?</li>
           <li>Envíala preferiblemente por un canal con cifrado de extremo a extremo. Evita el correo electrónico normal si puedes.</li>
           <li>Apunta el destinatario y la fecha. Si la copia aparece alguna vez en otro sitio, sabrás quién la tenía.</li>
           <li>Si te piden una copia sin tachar del DNI sin una razón clara, pregunta para qué la necesitan y en qué base legal se apoyan. A menudo es una señal de alarma.</li>
+          <li>Algunas organizaciones están obligadas por ley a ver ciertos datos: por ejemplo, los bancos deben verificar tu identidad por la normativa contra el blanqueo de capitales, y los alojamientos turísticos deben registrar los datos de tu documento. Si tienes dudas, pregunta al destinatario qué datos necesita realmente.</li>
+          <li>Después de enviarla, borra la copia de tu carpeta de descargas y no la dejes olvidada en chats o borradores de correo.</li>
         </ul>
       </section>
 
@@ -820,10 +826,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -832,6 +842,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();

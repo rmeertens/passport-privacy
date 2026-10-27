@@ -353,6 +353,7 @@
     <main>
       <section class="card tool">
         <h2>1. Dodaj dowód osobisty lub paszport</h2>
+        <noscript><p class="status error">To narzędzie wymaga JavaScriptu, który jest wyłączony w Twojej przeglądarce. Działa w całości na Twoim urządzeniu — nic nie jest wysyłane.</p></noscript>
         <p class="hint">Wybierz plik z urządzenia albo zrób zdjęcie aparatem. W obu przypadkach obraz pozostaje w tej przeglądarce.</p>
 
         <label class="file-drop" id="drop">
@@ -412,11 +413,11 @@
         <h2>2. Uzupełnij znak wodny</h2>
         <div class="form-grid">
           <label>
-            Cel przekazania kopii (wymagane — ten tekst pojawi się w znaku wodnym)
+            Dla kogo i w jakim celu? (wymagane — ten tekst pojawi się w znaku wodnym)
             <input type="text" id="purpose" placeholder="np. umowa najmu z Nieruchomości Sp. z o.o." maxlength="140" autocomplete="off" required value="zameldowanie w domku letniskowym" />
           </label>
           <label>
-            Data
+            Data przekazania
             <input type="date" id="date" />
           </label>
         </div>
@@ -427,7 +428,8 @@
             Przeciągnij po obrazie, aby narysować czarny prostokąt na każdym polu, którego wolisz nie udostępniać.
             Na polskim dowodzie osobistym zwykle warto zasłonić <strong>serię i numer dowodu</strong>,
             <strong>numer CAN</strong>, <strong>podpis</strong>, <strong>PESEL</strong> (jeśli odbiorca go nie
-            potrzebuje) oraz <strong>strefę MRZ</strong> (trzy wiersze tekstu z &lt;&lt;&lt; na odwrocie).
+            potrzebuje) oraz <strong>strefę MRZ</strong> (trzy wiersze tekstu z &lt;&lt;&lt; na odwrocie). Zasłoń też każdy <strong>kod QR</strong> — może
+            zawierać te same dane w formie do odczytu maszynowego.
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -452,6 +454,7 @@
           <li>Nic nie jest zapisywane — ani w ciasteczkach, ani w localStorage, ani nigdzie indziej.</li>
           <li>Odśwież stronę i wszystko znika. Zamknij kartę i wszystko znika.</li>
           <li>Możesz nawet zapisać tę stronę (Ctrl+S / ⌘+S) i używać jej całkowicie offline.</li>
+          <li>Pobrany plik JPEG to nowo wygenerowany obraz: ukryte metadane zdjęcia, takie jak lokalizacja GPS czy dane aparatu, nie są przenoszone.</li>
           <li>
             Ta strona celowo nie ładuje <em>żadnych</em> zewnętrznych skryptów — nawet do dekodowania HEIC —
             więc nie ma CDN, którego przejęcie pozwoliłoby zaatakować Twoją kopię strony.
@@ -493,6 +496,7 @@
         </p>
         <ul>
           <li>Spraw, by numer <strong>BSN</strong> (holenderski odpowiednik numeru PESEL) był nieczytelny na kopii — <em>również</em> w strefie odczytu maszynowego na dole dokumentu.</li>
+          <li>W dokumentach wydanych od <strong>2 sierpnia 2021 r.</strong> numer BSN jest zapisany w <strong>kodzie QR</strong> (na odwrocie dowodu osobistego i na stronie danych paszportu) — jego też trzeba zasłonić.</li>
           <li>Możesz też zasłonić <strong>zdjęcie</strong> i <strong>podpis</strong>.</li>
           <li>Napisz na kopii, że to <strong>kopia</strong>, oraz dla kogo / do jakiego produktu lub celu jest przeznaczona.</li>
           <li>Napisz na kopii <strong>datę</strong>, w której ją przekazujesz.</li>
@@ -547,10 +551,12 @@
       <section class="card">
         <h2>Zanim wyślesz kopię</h2>
         <ul>
-          <li>Sprawdź pobrany obraz: czy dane są naprawdę zasłonięte? Czy znak wodny jest czytelny?</li>
+          <li>Otwórz pobrany obraz i powiększ go: czy wszystkie dane do ukrycia są w pełni zasłonięte, łącznie z kodami QR? Czy znak wodny jest czytelny?</li>
           <li>Najlepiej wyślij kopię kanałem szyfrowanym end-to-end. Jeśli możesz, unikaj zwykłego e-maila.</li>
           <li>Zanotuj odbiorcę i datę. Jeśli kopia kiedyś wypłynie gdzie indziej, będziesz wiedzieć, kto ją miał.</li>
           <li>Jeśli ktoś żąda pełnej, niezasłoniętej kopii dowodu bez wyraźnego powodu, zapytaj o cel i podstawę prawną. Często to sygnał ostrzegawczy.</li>
+          <li>Niektóre instytucje są prawnie zobowiązane do sprawdzenia określonych danych — na przykład banki muszą zweryfikować Twoją tożsamość zgodnie z przepisami o przeciwdziałaniu praniu pieniędzy. W razie wątpliwości zapytaj odbiorcę, których danych naprawdę potrzebuje.</li>
+          <li>Po wysłaniu usuń kopię z folderu Pobrane i nie zostawiaj jej w czatach ani w wersjach roboczych e-maili.</li>
         </ul>
       </section>
 
@@ -815,10 +821,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -827,6 +837,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();

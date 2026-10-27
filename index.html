@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Passport Watermark & Blackout Tool</title>
+  <title>Watermark &amp; Redact Your Passport or ID Copy – Free, No Upload</title>
   <meta name="description" content="Add a watermark and black out personal details on a scan of your passport or ID — entirely in your browser. Nothing is uploaded, nothing is stored." />
   <link rel="canonical" href="https://passport-privacy.meertens.dev/" />
   <link rel="alternate" hreflang="en" href="https://passport-privacy.meertens.dev/" />
@@ -353,6 +353,7 @@
     <main>
       <section class="card tool">
         <h2>1. Add your passport or ID</h2>
+        <noscript><p class="status error">This tool needs JavaScript, which is turned off in your browser. It runs entirely on your device — nothing is uploaded.</p></noscript>
         <p class="hint">Choose a file from your device or take a photo with your camera. Both options keep the image entirely in this browser.</p>
 
         <label class="file-drop" id="drop">
@@ -412,11 +413,11 @@
         <h2>2. Fill in the watermark</h2>
         <div class="form-grid">
           <label>
-            Purpose of sending (required — this text appears on the watermark)
-            <input type="text" id="purpose" placeholder="e.g. rental contract with Acme Ltd" maxlength="140" autocomplete="off" required value="check in holiday home" />
+            Who is it for, and why? (required — this text appears on the watermark)
+            <input type="text" id="purpose" placeholder="e.g. rental contract with Acme Lettings Ltd" maxlength="140" autocomplete="off" required value="check in holiday home" />
           </label>
           <label>
-            Date
+            Date you share it
             <input type="date" id="date" />
           </label>
         </div>
@@ -424,9 +425,11 @@
         <div id="editor" hidden>
           <h2>3. Black out anything you don't want to share</h2>
           <p class="hint">
-            Drag on the image to draw a black rectangle over any field you'd rather not share.
-            On Dutch passports the usual ones to hide are the <strong>BSN</strong>, <strong>document number</strong>,
-            <strong>signature</strong>, and the <strong>MRZ</strong> (the two lines of &lt;&lt;&lt; text at the bottom).
+            Drag on the image to draw a black rectangle over any field you'd rather not share. Fields people
+            commonly hide are the <strong>document number</strong>, <strong>signature</strong>, any
+            <strong>national ID number</strong> (such as the Dutch BSN), any <strong>QR code</strong> — it can
+            hold the same data in machine-readable form — and the <strong>MRZ</strong> (the lines of
+            &lt;&lt;&lt; text at the bottom).
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -451,6 +454,7 @@
           <li>Nothing is saved — not in cookies, not in localStorage, not anywhere.</li>
           <li>Refresh the page and it's gone. Close the tab and it's gone.</li>
           <li>You can even save this page (Ctrl+S / ⌘+S) and use it fully offline.</li>
+          <li>The downloaded JPEG is a freshly drawn image: hidden photo metadata such as GPS location or camera details is not carried over.</li>
           <li>
             This page deliberately pulls in <em>zero</em> third-party scripts at runtime — not even for things
             like HEIC decoding — so there is no CDN that could be compromised to attack your copy of the page.
@@ -484,9 +488,10 @@
           block them out themselves if they make a copy.
         </p>
         <p style="margin-bottom: 0;">
-          Good to know: for Dutch passports and ID cards issued from <strong>2 August 2021</strong> onwards, the BSN is no
-          longer printed on the front of the document at all — it's encoded in a QR code on the back, so a plain
-          scan of the front no longer exposes it. Older documents still print the BSN and need it blacked out.
+          Watch out for the QR code: on Dutch passports and ID cards issued from <strong>2 August 2021</strong> onwards,
+          the BSN was taken out of the machine-readable lines and moved into a <strong>QR code</strong> — on the back
+          of the ID card and on the passport's photo page. Black out that QR code too. Older documents may also
+          print the BSN as a number, on the front or the back: black out every place it appears.
         </p>
       </section>
 
@@ -575,10 +580,12 @@
       <section class="card">
         <h2>Before you send your copy</h2>
         <ul>
-          <li>Double-check the downloaded image: is your BSN really covered? Is the watermark readable?</li>
+          <li>Open the downloaded image and zoom in: is everything you wanted hidden fully covered, including any QR code? Is the watermark readable?</li>
           <li>Prefer sending via an end-to-end encrypted channel. Avoid regular email if you can.</li>
           <li>Keep a note of the recipient and date. If the copy ever surfaces elsewhere you know who had it.</li>
           <li>Legally, in the Netherlands a shop, hotel, gym, or landlord is usually not allowed to demand an unredacted copy of your ID. Asking for one is often a red flag.</li>
+          <li>Some organisations are legally required to see specific fields — for example, a Dutch employer needs your BSN for payroll, and banks must verify your identity under anti-money-laundering rules. If you're unsure, ask the recipient which fields they actually need.</li>
+          <li>After sending, delete the copy from your Downloads folder, and don't leave it lying around in chats or email drafts.</li>
         </ul>
       </section>
 
@@ -842,10 +849,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -854,6 +865,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();

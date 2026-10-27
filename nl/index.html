@@ -353,6 +353,7 @@
     <main>
       <section class="card tool">
         <h2>1. Voeg je paspoort of ID-kaart toe</h2>
+        <noscript><p class="status error">Deze tool heeft JavaScript nodig, maar dat staat uit in je browser. Alles draait op je eigen apparaat — er wordt niets geüpload.</p></noscript>
         <p class="hint">Kies een bestand op je apparaat of maak een foto met je camera. In beide gevallen blijft de afbeelding in deze browser.</p>
 
         <label class="file-drop" id="drop">
@@ -412,11 +413,11 @@
         <h2>2. Vul het watermerk in</h2>
         <div class="form-grid">
           <label>
-            Doel van de kopie (verplicht — deze tekst komt in het watermerk)
+            Voor wie en waarvoor? (verplicht — deze tekst komt in het watermerk)
             <input type="text" id="purpose" placeholder="bijv. huurcontract met Woonbedrijf BV" maxlength="140" autocomplete="off" required value="inchecken vakantiewoning" />
           </label>
           <label>
-            Datum
+            Datum van afgeven
             <input type="date" id="date" />
           </label>
         </div>
@@ -425,8 +426,9 @@
           <h2>3. Scherm af wat je niet wilt delen</h2>
           <p class="hint">
             Sleep over de afbeelding om een zwart vlak te tekenen over elk veld dat je liever niet deelt.
-            Op Nederlandse paspoorten scherm je meestal het <strong>BSN</strong>, het <strong>documentnummer</strong>,
-            je <strong>handtekening</strong> en de <strong>MRZ</strong> af (de twee regels met &lt;&lt;&lt;-tekst onderaan).
+            Op Nederlandse paspoorten en ID-kaarten scherm je meestal het <strong>BSN</strong> af, ook de
+            <strong>QR-code</strong> waarin het BSN staat, plus het <strong>documentnummer</strong>, je
+            <strong>handtekening</strong> en de <strong>MRZ</strong> (de regels met &lt;&lt;&lt;-tekst).
           </p>
           <div class="canvas-wrap">
             <canvas id="canvas"></canvas>
@@ -451,6 +453,7 @@
           <li>Er wordt niets bewaard — niet in cookies, niet in localStorage, nergens.</li>
           <li>Ververs de pagina en het is weg. Sluit het tabblad en het is weg.</li>
           <li>Je kunt deze pagina zelfs opslaan (Ctrl+S / ⌘+S) en volledig offline gebruiken.</li>
+          <li>De gedownloade JPEG is een opnieuw getekende afbeelding: verborgen fotogegevens zoals je GPS-locatie of cameragegevens gaan niet mee.</li>
           <li>
             Deze pagina laadt bewust <em>geen enkel</em> extern script — zelfs niet voor zaken als
             HEIC-decodering — dus er is geen CDN dat gehackt kan worden om jouw kopie van de pagina aan te vallen.
@@ -485,10 +488,11 @@
           moeten afschermen als ze een kopie maken.
         </p>
         <p style="margin-bottom: 0;">
-          Goed om te weten: op Nederlandse paspoorten en ID-kaarten die vanaf <strong>2 augustus 2021</strong> zijn
-          uitgegeven, staat het BSN niet meer op de voorkant — het zit in een QR-code op de achterkant, dus een
-          scan van alleen de voorkant laat het niet meer zien. Op oudere documenten staat het BSN nog wel en moet
-          je het afschermen.
+          Let op de QR-code: op Nederlandse paspoorten en ID-kaarten die vanaf <strong>2 augustus 2021</strong> zijn
+          uitgegeven, is het BSN uit de machineleesbare regels gehaald en verplaatst naar een <strong>QR-code</strong>
+          — op de achterkant van de ID-kaart en op de fotopagina van het paspoort. Scherm die QR-code dus ook af.
+          Op oudere documenten kan het BSN ook als getal op de voor- of achterkant staan: scherm elke plek af
+          waar het staat.
         </p>
       </section>
 
@@ -577,10 +581,12 @@
       <section class="card">
         <h2>Voordat je je kopie verstuurt</h2>
         <ul>
-          <li>Controleer de gedownloade afbeelding: is je BSN echt afgeschermd? Is het watermerk leesbaar?</li>
+          <li>Open de gedownloade afbeelding en zoom in: is alles wat je wilde afschermen echt bedekt, ook de QR-code? Is het watermerk leesbaar?</li>
           <li>Verstuur bij voorkeur via een end-to-end versleuteld kanaal. Vermijd gewone e-mail als dat kan.</li>
           <li>Noteer de ontvanger en de datum. Duikt de kopie ooit ergens anders op, dan weet je wie hem had.</li>
           <li>In Nederland mag een winkel, hotel, sportschool of verhuurder meestal geen kopie van je ID zonder afscherming eisen. Vraagt iemand daar toch om, dan is dat vaak een waarschuwingssignaal.</li>
+          <li>Sommige organisaties moeten wettelijk bepaalde gegevens zien — je werkgever heeft bijvoorbeeld je BSN nodig voor de loonadministratie, en banken moeten je identiteit controleren vanwege de witwasregels. Twijfel je? Vraag de ontvanger welke gegevens echt nodig zijn.</li>
+          <li>Verwijder de kopie na het versturen uit je map Downloads, en laat hem niet rondslingeren in chats of conceptmails.</li>
         </ul>
       </section>
 
@@ -844,10 +850,14 @@
         const w = canvas.width;
         const h = canvas.height;
         ctx.save();
-        ctx.globalAlpha = 0.28;
-        ctx.fillStyle = '#ffffff';
+        // Dark text with a light outline stays visible on both pale and dark documents.
+        ctx.globalAlpha = 0.35;
         const fontSize = Math.max(22, Math.min(w, h) / 18);
         ctx.font = '700 ' + fontSize + 'px system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = Math.max(2, fontSize / 7);
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#0b1f3a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.translate(w / 2, h / 2);
@@ -856,6 +866,7 @@
         const spacing = fontSize * 3;
         const lines = Math.ceil(diagonal / spacing);
         for (let i = -lines; i <= lines; i++) {
+          ctx.strokeText(text, 0, i * spacing);
           ctx.fillText(text, 0, i * spacing);
         }
         ctx.restore();
